@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>M GRAND | Factory Engineer Dashboard</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,"Noto Sans Thai",sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#1f2937;
+}
+
+/* ================= LOGIN ================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    background:#07111f;
+}
+
+.login-left{
+    width:55%;
+    padding:60px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:
+        linear-gradient(rgba(3,15,30,.82),rgba(3,15,30,.9)),
+        url("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1600&q=80")
+        center/cover;
+}
+
+.login-left h1{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.login-left h2{
+    font-size:24px;
+    font-weight:400;
+    margin-bottom:25px;
+}
+
+.login-left p{
+    color:#cbd5e1;
+    max-width:650px;
+    line-height:1.8;
+}
+
+.logo-box{
+    width:130px;
+    height:130px;
+    background:white;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:30px;
+    overflow:hidden;
+}
+
+.logo-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.login-right{
+    width:45%;
+    background:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+}
+
+.login-card{
+    width:100%;
+    max-width:420px;
+}
+
+.login-card h2{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.login-card .sub{
+    color:#64748b;
+    margin-bottom:30px;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:16px;
+}
+
+.login-btn{
+    width:100%;
+    padding:15px;
+    border:0;
+    border-radius:10px;
+    background:#1261d6;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-btn:hover{
+    background:#0849aa;
+}
+
+.login-message{
+    margin-top:15px;
+    text-align:center;
+    color:#dc2626;
+}
+
+/* ================= APP ================= */
+
+#app{
+    display:none;
+    min-height:100vh;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:250px;
+    background:#07111f;
+    color:white;
+    padding:20px;
+    overflow-y:auto;
+}
+
+.sidebar-logo{
+    text-align:center;
+    padding:10px;
+    margin-bottom:25px;
+}
+
+.sidebar-logo img{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    background:white;
+    border-radius:15px;
+}
+
+.sidebar-logo h3{
+    margin-top:10px;
+    font-size:15px;
+}
+
+.sidebar-logo span{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin-bottom:5px;
+}
+
+.menu button{
+    width:100%;
+    background:transparent;
+    border:0;
+    color:#cbd5e1;
+    text-align:left;
+    padding:13px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.menu button:hover,
+.menu button.active{
+    background:#1261d6;
+    color:white;
+}
+
+.logout{
+    margin-top:30px;
+    border-top:1px solid #243244;
+    padding-top:20px;
+}
+
+.main{
+    margin-left:250px;
+    padding:25px;
+}
+
+/* ================= HEADER ================= */
+
+.topbar{
+    background:white;
+    padding:18px 22px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    box-shadow:0 2px 10px rgba(0,0,0,.04);
+}
+
+.topbar h1{
+    font-size:23px;
+}
+
+.user-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    background:#1261d6;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+/* ================= PAGES ================= */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-title{
+    margin-bottom:20px;
+}
+
+.page-title h2{
+    font-size:24px;
+}
+
+.page-title p{
+    color:#64748b;
+    margin-top:5px;
+}
+
+/* ================= KPI ================= */
+
+.kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.kpi{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,.04);
+}
+
+.kpi-title{
+    color:#64748b;
+    font-size:13px;
+}
+
+.kpi-value{
+    font-size:30px;
+    font-weight:bold;
+    margin:8px 0;
+}
+
+.kpi small{
+    color:#64748b;
+}
+
+/* ================= CARDS ================= */
+
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 10px rgba(0,0,0,.04);
+    margin-bottom:20px;
+}
+
+.card h3{
+    margin-bottom:18px;
+}
+
+/* ================= BAR CHART ================= */
+
+.chart{
+    height:260px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-around;
+    gap:15px;
+    padding-top:20px;
+}
+
+.bar-box{
+    height:100%;
+    flex:1;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    position:relative;
+}
+
+.bar{
+    width:50%;
+    background:#1261d6;
+    border-radius:6px 6px 0 0;
+    min-height:10px;
+}
+
+.bar-label{
+    position:absolute;
+    bottom:-25px;
+    font-size:12px;
+    color:#64748b;
+}
+
+/* ================= STATUS ================= */
+
+.status-row{
+    margin-bottom:15px;
+}
+
+.status-header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:5px;
+    font-size:13px;
+}
+
+.progress{
+    height:9px;
+    background:#e5e7eb;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-inner{
+    height:100%;
+    background:#1261d6;
+}
+
+/* ================= TABLE ================= */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    background:#f8fafc;
+}
+
+.badge{
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.todo{
+    background:#e0f2fe;
+    color:#0369a1;
+}
+
+.progress-status{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.review{
+    background:#ede9fe;
+    color:#6d28d9;
+}
+
+.completed{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.cancelled{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.wait{
+    background:#fce7f3;
+    color:#9d174d;
+}
+
+/* ================= BUTTON ================= */
+
+.btn{
+    border:0;
+    border-radius:8px;
+    padding:10px 15px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-primary{
+    background:#1261d6;
+    color:white;
+}
+
+.btn-secondary{
+    background:#e5e7eb;
+    color:#1f2937;
+}
+
+/* ================= FORM ================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+}
+
+.form-group textarea{
+    min-height:100px;
+}
+
+/* ================= PORTFOLIO ================= */
+
+.portfolio-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.portfolio{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.04);
+}
+
+.portfolio-img{
+    height:140px;
+    background:#e5e7eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#64748b;
+}
+
+.portfolio-content{
+    padding:18px;
+}
+
+.portfolio-content h3{
+    margin-bottom:8px;
+}
+
+.portfolio-content p{
+    color:#64748b;
+    font-size:13px;
+    line-height:1.6;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1100px){
+    .kpi-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .portfolio-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:800px){
+
+    .login-left{
+        display:none;
+    }
+
+    .login-right{
+        width:100%;
+    }
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .kpi-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .grid-2{
+        grid-template-columns:1fr;
+    }
+
+    .portfolio-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:500px){
+
+    .kpi-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!-- LOGIN -->
+<!-- ========================================================= -->
+
+<div id="loginPage">
+
+    <div class="login-left">
+
+        <div class="logo-box">
+            <img src="https://dummyimage.com/300x300/ffffff/1261d6&text=M+GRAND">
+        </div>
+
+        <h1>FACTORY ENGINEER</h1>
+
+        <h2>Engineering Work Management System</h2>
+
+        <p>
+            ระบบบริหารงานวิศวกรรมโรงงาน
+            สำหรับติดตามงาน Maintenance, Utility,
+            Electrical, HVAC, Machine, Improvement
+            และ Engineering Project
+        </p>
+
+    </div>
+
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <h2>เข้าสู่ระบบ</h2>
+
+            <div class="sub">
+                M Grand Bio Tech Engineering
+            </div>
+
+            <div class="input-group">
+                <label>Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="กรอก Username"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="กรอก Password"
+                >
+            </div>
+
+            <button class="login-btn" onclick="login()">
+                LOGIN
+            </button>
+
+            <div
+                class="login-message"
+                id="loginMessage">
+            </div>
+
+            <p style="
+                margin-top:20px;
+                text-align:center;
+                color:#94a3b8;
+                font-size:12px;
+            ">
+                Demo Login: admin / 1234
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- APPLICATION -->
+<!-- ========================================================= -->
+
+<div id="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <img
+                src="https://dummyimage.com/300x300/ffffff/1261d6&text=M+GRAND"
+            >
+
+            <h3>M GRAND BIO TECH</h3>
+
+            <span>FACTORY ENGINEERING</span>
+
+        </div>
+
+
+        <ul class="menu">
+
+            <li>
+                <button
+                    class="active"
+                    onclick="showPage('dashboard',this)">
+                    Dashboard
+                </button>
+            </li>
+
+            <li>
+                <button
+                    onclick="showPage('daily',this)">
+                    Daily Work
+                </button>
+            </li>
+
+            <li>
+                <button
+                    onclick="showPage('weekly',this)">
+                    Weekly Report
+                </button>
+            </li>
+
+            <li>
+                <button
+                    onclick="showPage('monthly',this)">
+                    Monthly Report
+                </button>
+            </li>
+
+            <li>
+                <button
+                    onclick="showPage('yearly',this)">
+                    Yearly Performance
+                </button>
+            </li>
+
+            <li>
+                <button
+                    onclick="showPage('portfolio',this)">
+                    Work Portfolio
+                </button>
+            </li>
+
+            <li>
+                <button
+                    onclick="showPage('machine',this)">
+                    Machine / Asset
+                </button>
+            </li>
+
+            <li>
+                <button
+                    onclick="showPage('kpi',this)">
+                    KPI & Analytics
+                </button>
+            </li>
+
+        </ul>
+
+
+        <div class="logout">
+
+            <button
+                class="menu button"
+                onclick="logout()"
+                style="
+                    width:100%;
+                    padding:12px;
+                    background:#991b1b;
+                    color:white;
+                    border:0;
+                    border-radius:8px;
+                    cursor:pointer;
+                ">
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div>
+
+                <h1 id="pageHeader">
+                    Engineering Dashboard
+                </h1>
+
+                <span style="
+                    color:#64748b;
+                    font-size:12px;
+                ">
+                    M Grand Bio Tech Co., Ltd.
+                </span>
+
+            </div>
+
+            <div class="user-info">
+
+                <div>
+                    <strong id="currentUser">
+                        Engineering
+                    </strong>
+                    <br>
+                    <small style="color:#64748b;">
+                        Factory Engineer
+                    </small>
+                </div>
+
+                <div class="avatar">
+                    EN
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- DASHBOARD -->
+        <!-- ================================================= -->
+
+        <section
+            id="dashboard"
+            class="page active">
+
+            <div class="page-title">
+
+                <h2>Executive Overview</h2>
+
+                <p>
+                    ภาพรวมงานวิศวกรรมโรงงาน
+                </p>
+
+            </div>
+
+
+            <div class="kpi-grid">
+
+                <div class="kpi">
+
+                    <div class="kpi-title">
+                        TOTAL WORK
+                    </div>
+
+                    <div
+                        class="kpi-value"
+                        id="totalTasks">
+                        128
+                    </div>
+
+                    <small>
+                        งานทั้งหมด
+                    </small>
+
+                </div>
+
+
+                <div class="kpi">
+
+                    <div class="kpi-title">
+                        COMPLETED
+                    </div>
+
+                    <div
+                        class="kpi-value"
+                        id="completedTasks">
+                        82
+                    </div>
+
+                    <small>
+                        งานเสร็จสิ้น
+                    </small>
+
+                </div>
+
+
+                <div class="kpi">
+
+                    <div class="kpi-title">
+                        IN PROGRESS
+                    </div>
+
+                    <div class="kpi-value">
+                        18
+                    </div>
+
+                    <small>
+                        กำลังดำเนินการ
+                    </small>
+
+                </div>
+
+
+                <div class="kpi">
+
+                    <div class="kpi-title">
+                        OVERDUE
+                    </div>
+
+                    <div class="kpi-value">
+                        15
+                    </div>
+
+                    <small>
+                        เกินกำหนด
+                    </small>
+
+                </div>
+
+
+                <div class="kpi">
+
+                    <div class="kpi-title">
+                        COMPLETION
+                    </div>
+
+                    <div class="kpi-value">
+                        71%
+                    </div>
+
+                    <small>
+                        อัตรางานสำเร็จ
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid-2">
+
+                <!-- WEEKLY CHART -->
+
+                <div class="card">
+
+                    <h3>
+                        Weekly Work Trend
+                    </h3>
+
+                    <div class="chart">
+
+                        <div class="bar-box">
+                            <div
+                                class="bar"
+                                style="height:45%">
+                            </div>
+                            <span class="bar-label">Mon</span>
+                        </div>
+
+                        <div class="bar-box">
+                            <div
+                                class="bar"
+                                style="height:70%">
+                            </div>
+                            <span class="bar-label">Tue</span>
+                        </div>
+
+                        <div class="bar-box">
+                            <div
+                                class="bar"
+                                style="height:55%">
+                            </div>
+                            <span class="bar-label">Wed</span>
+                        </div>
+
+                        <div class="bar-box">
+                            <div
+                                class="bar"
+                                style="height:85%">
+                            </div>
+                            <span class="bar-label">Thu</span>
+                        </div>
+
+                        <div class="bar-box">
+                            <div
+                                class="bar"
+                                style="height:65%">
+                            </div>
+                            <span class="bar-label">Fri</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="card">
+
+                    <h3>
+                        Work Status
+                    </h3>
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>Completed</span>
+                            <span>64%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:64%">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>In Progress</span>
+                            <span>14%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:14%">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>To Do</span>
+                            <span>10%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:10%">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>Review</span>
+                            <span>7%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:7%">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>Waiting Approval</span>
+                            <span>5%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:5%">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CURRENT WORK -->
+
+            <div class="card">
+
+                <h3>
+                    Current Engineering Work
+                </h3>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Task ID</th>
+                                <th>งาน</th>
+                                <th>Category</th>
+                                <th>Progress</th>
+                                <th>Status</th>
+                                <th>Due Date</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="taskTable">
+
+                            <tr>
+                                <td>ENG-2026-001</td>
+                                <td>ตรวจสอบระบบ Compressed Air</td>
+                                <td>Utility</td>
+                                <td>70%</td>
+                                <td>
+                                    <span class="badge progress-status">
+                                        IN PROGRESS
+                                    </span>
+                                </td>
+                                <td>30/09/2026</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>ENG-2026-002</td>
+                                <td>PM Capsule Press</td>
+                                <td>Maintenance</td>
+                                <td>100%</td>
+                                <td>
+                                    <span class="badge completed">
+                                        COMPLETED
+                                    </span>
+                                </td>
+                                <td>29/09/2026</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>ENG-2026-003</td>
+                                <td>ตรวจสอบ Electrical Load</td>
+                                <td>Electrical</td>
+                                <td>50%</td>
+                                <td>
+                                    <span class="badge progress-status">
+                                        IN PROGRESS
+                                    </span>
+                                </td>
+                                <td>02/10/2026</td>
+                            </tr>
+
+
+                            <tr>
+                                <td>ENG-2026-004</td>
+                                <td>จัดทำ Machine Asset Code</td>
+                                <td>Asset</td>
+                                <td>90%</td>
+                                <td>
+                                    <span class="badge review">
+                                        REVIEW
+                                    </span>
+                                </td>
+                                <td>01/10/2026</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- DAILY WORK -->
+        <!-- ================================================= -->
+
+        <section
+            id="daily"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>Daily Work</h2>
+
+                <p>
+                    บันทึกและติดตามงานวิศวกรรมประจำวัน
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    เพิ่มงานใหม่
+                </h3>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Task Name
+                        </label>
+
+                        <input
+                            id="newTask"
+                            placeholder="ชื่องาน">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <select id="newCategory">
+
+                            <option>Maintenance</option>
+                            <option>Utility</option>
+                            <option>Electrical</option>
+                            <option>HVAC</option>
+                            <option>Machine</option>
+                            <option>Improvement</option>
+                            <option>Project</option>
+                            <option>Safety</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Priority
+                        </label>
+
+                        <select>
+
+                            <option>LOW</option>
+                            <option selected>MEDIUM</option>
+                            <option>HIGH</option>
+                            <option>URGENT</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Due Date
+                        </label>
+
+                        <input
+                            type="date">
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            รายละเอียดงาน
+                        </label>
+
+                        <textarea
+                            placeholder="รายละเอียดงาน / ปัญหา / สิ่งที่ต้องดำเนินการ">
+                        </textarea>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="btn btn-primary"
+                    onclick="addTask()">
+
+                    + เพิ่มงาน
+
+                </button>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Today's Work
+                </h3>
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Task</th>
+                                <th>Category</th>
+                                <th>Progress</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="dailyTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- WEEKLY -->
+        <!-- ================================================= -->
+
+        <section
+            id="weekly"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>Weekly Report</h2>
+
+                <p>
+                    รายงานผลการทำงานประจำสัปดาห์
+                </p>
+
+            </div>
+
+
+            <div class="kpi-grid">
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        WORK CREATED
+                    </div>
+                    <div class="kpi-value">
+                        24
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        COMPLETED
+                    </div>
+                    <div class="kpi-value">
+                        18
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        IN PROGRESS
+                    </div>
+                    <div class="kpi-value">
+                        5
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        OVERDUE
+                    </div>
+                    <div class="kpi-value">
+                        1
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        COMPLETION
+                    </div>
+                    <div class="kpi-value">
+                        75%
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Weekly Summary
+                </h3>
+
+                <p style="line-height:2;color:#475569">
+
+                    สรุปงานประจำสัปดาห์สามารถนำข้อมูลจาก
+                    Daily Work มาคำนวณอัตโนมัติได้
+
+                    <br>
+
+                    • งานที่รับเข้ามาใหม่
+
+                    <br>
+
+                    • งานที่เสร็จสิ้น
+
+                    <br>
+
+                    • งานค้าง
+
+                    <br>
+
+                    • งานเกินกำหนด
+
+                    <br>
+
+                    • ปัญหาที่พบ
+
+                    <br>
+
+                    • งานที่ต้องดำเนินการต่อสัปดาห์หน้า
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- MONTHLY -->
+        <!-- ================================================= -->
+
+        <section
+            id="monthly"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>Monthly Report</h2>
+
+                <p>
+                    รายงานผลการทำงานประจำเดือน
+                </p>
+
+            </div>
+
+
+            <div class="grid-2">
+
+                <div class="card">
+
+                    <h3>
+                        Monthly KPI
+                    </h3>
+
+                    <div class="status-row">
+                        งานทั้งหมด
+                        <strong style="float:right">
+                            128
+                        </strong>
+                    </div>
+
+                    <div class="status-row">
+                        งานเสร็จ
+                        <strong style="float:right">
+                            82
+                        </strong>
+                    </div>
+
+                    <div class="status-row">
+                        งานค้าง
+                        <strong style="float:right">
+                            31
+                        </strong>
+                    </div>
+
+                    <div class="status-row">
+                        งานยกเลิก
+                        <strong style="float:right">
+                            15
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Engineering Impact
+                    </h3>
+
+                    <div class="status-row">
+                        Improvement Project
+                        <strong style="float:right">
+                            8
+                        </strong>
+                    </div>
+
+                    <div class="status-row">
+                        PM Completed
+                        <strong style="float:right">
+                            25
+                        </strong>
+                    </div>
+
+                    <div class="status-row">
+                        Downtime Reduction
+                        <strong style="float:right">
+                            32 Hr
+                        </strong>
+                    </div>
+
+                    <div class="status-row">
+                        Cost Saving
+                        <strong style="float:right">
+                            ฿85,000
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- YEARLY -->
+        <!-- ================================================= -->
+
+        <section
+            id="yearly"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>Yearly Performance</h2>
+
+                <p>
+                    สรุปผลงานวิศวกรรมประจำปี
+                </p>
+
+            </div>
+
+
+            <div class="kpi-grid">
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        TOTAL WORK
+                    </div>
+                    <div class="kpi-value">
+                        1,245
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        COMPLETED
+                    </div>
+                    <div class="kpi-value">
+                        1,081
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        PROJECT
+                    </div>
+                    <div class="kpi-value">
+                        32
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        SAVING
+                    </div>
+                    <div class="kpi-value">
+                        ฿1.25M
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-title">
+                        DOWNTIME REDUCTION
+                    </div>
+                    <div class="kpi-value">
+                        420 Hr
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Yearly Engineering Performance
+                </h3>
+
+                <p style="
+                    line-height:2;
+                    color:#475569;
+                ">
+
+                    ระบบสามารถเก็บ Portfolio ของงานวิศวกร
+                    ตั้งแต่วันแรกจนถึงสิ้นปี
+                    เพื่อใช้ประกอบการประเมินผลงาน
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- PORTFOLIO -->
+        <!-- ================================================= -->
+
+        <section
+            id="portfolio"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>Work Portfolio</h2>
+
+                <p>
+                    ผลงานและโครงการปรับปรุงของวิศวกร
+                </p>
+
+            </div>
+
+
+            <div class="portfolio-grid">
+
+
+                <div class="portfolio">
+
+                    <div class="portfolio-img">
+                        BEFORE / AFTER
+                    </div>
+
+                    <div class="portfolio-content">
+
+                        <h3>
+                            Compressed Air Improvement
+                        </h3>
+
+                        <p>
+                            ปรับปรุงระบบ Compressed Air
+                            และแยกระบบ Oil Free /
+                            Oil Flooded
+                        </p>
+
+                        <br>
+
+                        <strong>
+                            Impact:
+                        </strong>
+
+                        ลดความเสี่ยงด้านคุณภาพลม
+
+                    </div>
+
+                </div>
+
+
+                <div class="portfolio">
+
+                    <div class="portfolio-img">
+                        MACHINE
+                    </div>
+
+                    <div class="portfolio-content">
+
+                        <h3>
+                            Machine Asset Coding
+                        </h3>
+
+                        <p>
+                            จัดทำระบบรหัสเครื่องจักร
+                            และ Asset Register
+                            สำหรับโรงงาน
+                        </p>
+
+                        <br>
+
+                        <strong>
+                            Impact:
+                        </strong>
+
+                        เพิ่มประสิทธิภาพงาน Maintenance
+
+                    </div>
+
+                </div>
+
+
+                <div class="portfolio">
+
+                    <div class="portfolio-img">
+                        ELECTRICAL
+                    </div>
+
+                    <div class="portfolio-content">
+
+                        <h3>
+                            Electrical Load Analysis
+                        </h3>
+
+                        <p>
+                            วิเคราะห์โหลดไฟฟ้าเครื่องจักร
+                            และตรวจสอบความเพียงพอของระบบ
+                        </p>
+
+                        <br>
+
+                        <strong>
+                            Impact:
+                        </strong>
+
+                        ลดความเสี่ยงระบบไฟฟ้า
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- MACHINE -->
+        <!-- ================================================= -->
+
+        <section
+            id="machine"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>Machine / Asset</h2>
+
+                <p>
+                    ทะเบียนเครื่องจักรและทรัพย์สิน
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Machine No.</th>
+                                <th>Machine Name</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th>Manufacturer</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr>
+                                <td>MC-CAP-001</td>
+                                <td>Capsule Press</td>
+                                <td>CAP</td>
+                                <td>Production</td>
+                                <td>Manufacturer A</td>
+                                <td>
+                                    <span class="badge completed">
+                                        RUNNING
+                                    </span>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>MC-SIF-001</td>
+                                <td>Sifter</td>
+                                <td>SIFTER</td>
+                                <td>Production</td>
+                                <td>Manufacturer B</td>
+                                <td>
+                                    <span class="badge completed">
+                                        RUNNING
+                                    </span>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>AC-FAC-001</td>
+                                <td>Factory Air Conditioner</td>
+                                <td>HVAC</td>
+                                <td>Factory</td>
+                                <td>Daikin</td>
+                                <td>
+                                    <span class="badge completed">
+                                        ACTIVE
+                                    </span>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- KPI -->
+        <!-- ================================================= -->
+
+        <section
+            id="kpi"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>KPI & Analytics</h2>
+
+                <p>
+                    วิเคราะห์ประสิทธิภาพงานวิศวกรรม
+                </p>
+
+            </div>
+
+
+            <div class="grid-2">
+
+                <div class="card">
+
+                    <h3>
+                        Work KPI
+                    </h3>
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>Completion Rate</span>
+                            <span>71%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:71%">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>On-Time Rate</span>
+                            <span>88%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:88%">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-header">
+                            <span>PM Completion</span>
+                            <span>94%</span>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-inner"
+                                style="width:94%">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Engineering Impact
+                    </h3>
+
+                    <p style="
+                        line-height:2;
+                        color:#475569;
+                    ">
+
+                        Cost Saving:
+                        <strong>฿1,250,000</strong>
+
+                        <br>
+
+                        Downtime Reduction:
+                        <strong>420 Hr</strong>
+
+                        <br>
+
+                        Energy Saving:
+                        <strong>12,500 kWh</strong>
+
+                        <br>
+
+                        Improvement Projects:
+                        <strong>32 Projects</strong>
+
+                        <br>
+
+                        PM Completed:
+                        <strong>320 Jobs</strong>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
+/* ================= LOGIN ================= */
+
+function login(){
+
+    const username =
+        document.getElementById("username").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    const message =
+        document.getElementById("loginMessage");
+
+
+    /*
+        DEMO LOGIN
+
+        Username:
+        admin
+
+        Password:
+        1234
+
+        ตอนเชื่อม Database จริง
+        ส่วนนี้จะเปลี่ยนเป็น API Login
+    */
+
+    if(
+        username === "admin" &&
+        password === "1234"
+    ){
+
+        document.getElementById("loginPage")
+            .style.display = "none";
+
+        document.getElementById("app")
+            .style.display = "block";
+
+        document.getElementById("currentUser")
+            .innerText = username;
+
+        localStorage.setItem(
+            "engineerLogin",
+            "true"
+        );
+
+    }else{
+
+        message.innerText =
+            "Username หรือ Password ไม่ถูกต้อง";
+
+    }
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+    localStorage.removeItem(
+        "engineerLogin"
+    );
+
+    location.reload();
+
+}
+
+
+/* ================= PAGE NAVIGATION ================= */
+
+function showPage(
+    pageId,
+    button
+){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(function(page){
+
+            page.classList.remove("active");
+
+        });
+
+
+    document
+        .getElementById(pageId)
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll(".menu button")
+        .forEach(function(btn){
+
+            btn.classList.remove("active");
+
+        });
+
+
+    button.classList.add("active");
+
+
+    const titles = {
+
+        dashboard:
+            "Engineering Dashboard",
+
+        daily:
+            "Daily Work",
+
+        weekly:
+            "Weekly Report",
+
+        monthly:
+            "Monthly Report",
+
+        yearly:
+            "Yearly Performance",
+
+        portfolio:
+            "Work Portfolio",
+
+        machine:
+            "Machine / Asset",
+
+        kpi:
+            "KPI & Analytics"
+
+    };
+
+
+    document.getElementById(
+        "pageHeader"
+    ).innerText = titles[pageId];
+
+}
+
+
+/* ================= ADD TASK ================= */
+
+function addTask(){
+
+    const task =
+        document.getElementById(
+            "newTask"
+        ).value;
+
+    const category =
+        document.getElementById(
+            "newCategory"
+        ).value;
+
+
+    if(!task){
+
+        alert(
+            "กรุณากรอกชื่องาน"
+        );
+
+        return;
+
+    }
+
+
+    const table =
+        document.getElementById(
+            "dailyTable"
+        );
+
+
+    const id =
+        "ENG-2026-" +
+        String(
+            table.children.length + 5
+        ).padStart(3,"0");
+
+
+    const row =
+        document.createElement("tr");
+
+
+    row.innerHTML = `
+
+        <td>${id}</td>
+
+        <td>${task}</td>
+
+        <td>${category}</td>
+
+        <td>0%</td>
+
+        <td>
+
+            <span
+                class="badge todo">
+
+                TODO
+
+            </span>
+
+        </td>
+
+    `;
+
+
+    table.appendChild(row);
+
+
+    document.getElementById(
+        "newTask"
+    ).value = "";
+
+
+    alert(
+        "เพิ่มงานเรียบร้อยแล้ว"
+    );
+
+}
+
+
+/* ================= LOAD ================= */
+
+window.onload = function(){
+
+    const logged =
+        localStorage.getItem(
+            "engineerLogin"
+        );
+
+
+    if(logged === "true"){
+
+        document.getElementById(
+            "loginPage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "app"
+        ).style.display = "block";
+
+    }
+
+
+    /*
+        Demo Daily Work
+    */
+
+    const tasks = [
+
+        [
+            "ENG-2026-005",
+            "ตรวจสอบ Air Compressor",
+            "Utility",
+            "30%",
+            "IN PROGRESS"
+        ],
+
+        [
+            "ENG-2026-006",
+            "ตรวจสอบตู้ MDB",
+            "Electrical",
+            "50%",
+            "IN PROGRESS"
+        ],
+
+        [
+            "ENG-2026-007",
+            "PM เครื่องติดสติ๊กเกอร์",
+            "Maintenance",
+            "100%",
+            "COMPLETED"
+        ]
+
+    ];
+
+
+    const table =
+        document.getElementById(
+            "dailyTable"
+        );
+
+
+    tasks.forEach(function(t){
+
+        const row =
+            document.createElement("tr");
+
+
+        let badge =
+            "todo";
+
+
+        if(t[4] === "IN PROGRESS")
+            badge = "progress-status";
+
+
+        if(t[4] === "COMPLETED")
+            badge = "completed";
+
+
+        row.innerHTML = `
+
+            <td>${t[0]}</td>
+
+            <td>${t[1]}</td>
+
+            <td>${t[2]}</td>
+
+            <td>${t[3]}</td>
+
+            <td>
+
+                <span
+                    class="badge ${badge}">
+
+                    ${t[4]}
+
+                </span>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+};
+
+</script>
+
+</body>
+</html>
