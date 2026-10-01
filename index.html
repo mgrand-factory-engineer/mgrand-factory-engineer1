@@ -1,11 +1,13 @@
+```html
 <!DOCTYPE html>
-
 <html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>M GRAND | Factory Engineer Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{
@@ -16,64 +18,70 @@
 }
 
 body{
-    background:#f3f6fa;
+    background:#f4f7fb;
     color:#1f2937;
 }
 
-button,input,select,textarea{
+button,
+input,
+select,
+textarea{
     font-family:inherit;
+}
+
+button{
+    cursor:pointer;
 }
 
 .hidden{
     display:none !important;
 }
 
-/* =========================
-   LOGIN
-========================= */
-
-.login-page{
+/* LOGIN */
+#loginPage{
     min-height:100vh;
     display:flex;
-    align-items:center;
     justify-content:center;
-    background:
-        linear-gradient(rgba(8,20,38,.78),rgba(8,20,38,.82)),
-        url("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=2000&q=80")
-        center/cover;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a);
+    padding:20px;
 }
 
 .login-box{
-    width:420px;
-    max-width:92%;
-    background:rgba(255,255,255,.97);
-    border-radius:22px;
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:20px;
     padding:35px;
-    box-shadow:0 25px 70px rgba(0,0,0,.30);
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
 
 .logo-box{
-    text-align:center;
-    margin-bottom:20px;
+    width:180px;
+    height:100px;
+    margin:0 auto 20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .logo-box img{
-    max-width:220px;
-    max-height:100px;
+    max-width:100%;
+    max-height:100%;
     object-fit:contain;
 }
 
 .login-title{
     text-align:center;
     font-size:25px;
-    font-weight:800;
-    color:#0f2747;
+    font-weight:bold;
+    color:#0f172a;
 }
 
 .login-subtitle{
     text-align:center;
+    margin:8px 0 25px;
     color:#64748b;
-    margin:7px 0 25px;
 }
 
 .form-group{
@@ -82,183 +90,164 @@ button,input,select,textarea{
 
 .form-group label{
     display:block;
-    font-weight:700;
-    font-size:14px;
     margin-bottom:7px;
-}
-
-.form-control{
-    width:100%;
-    padding:12px 14px;
-    border:1px solid #d5dce5;
-    border-radius:10px;
-    outline:none;
+    font-weight:bold;
     font-size:14px;
-    background:#fff;
 }
 
-.form-control:focus{
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,.10);
-}
-
-.login-btn{
+.form-group input,
+.form-group select,
+.form-group textarea{
     width:100%;
-    border:0;
-    padding:13px;
+    border:1px solid #d1d5db;
     border-radius:10px;
-    background:#0f2747;
-    color:#fff;
-    font-size:16px;
-    font-weight:800;
-    cursor:pointer;
+    padding:12px;
+    outline:none;
 }
 
-.login-btn:hover{
-    background:#173b67;
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:#2563eb;
+}
+
+.btn{
+    border:none;
+    border-radius:10px;
+    padding:11px 16px;
+    font-weight:bold;
+}
+
+.btn-primary{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#1d4ed8;
+}
+
+.btn-danger{
+    background:#dc2626;
+    color:white;
+}
+
+.btn-success{
+    background:#16a34a;
+    color:white;
+}
+
+.btn-secondary{
+    background:#64748b;
+    color:white;
+}
+
+.btn-full{
+    width:100%;
 }
 
 .login-error{
     color:#dc2626;
-    text-align:center;
     margin-top:12px;
+    text-align:center;
     font-size:14px;
 }
 
-/* =========================
-   APP
-========================= */
-
-.app{
+/* APP */
+#appPage{
     min-height:100vh;
+}
+
+.layout{
     display:flex;
+    min-height:100vh;
 }
 
 .sidebar{
-    width:245px;
-    min-height:100vh;
-    background:#0c1f36;
-    color:#fff;
+    width:250px;
+    background:#0f172a;
+    color:white;
     position:fixed;
     left:0;
     top:0;
     bottom:0;
-    z-index:20;
     overflow-y:auto;
+    z-index:100;
 }
 
 .sidebar-logo{
-    padding:22px 20px;
-    border-bottom:1px solid rgba(255,255,255,.1);
+    padding:20px;
     text-align:center;
+    border-bottom:1px solid rgba(255,255,255,.1);
 }
 
 .sidebar-logo img{
-    width:165px;
-    max-height:70px;
+    width:150px;
+    max-height:80px;
     object-fit:contain;
 }
 
-.engineering-label{
-    margin-top:10px;
+.company-name{
     font-size:13px;
-    color:#a9bfd9;
-    font-weight:700;
+    color:#cbd5e1;
+    margin-top:8px;
 }
 
-.nav{
+.menu{
     padding:15px 10px;
 }
 
-.nav-title{
-    color:#6f8aa8;
-    font-size:11px;
-    font-weight:800;
-    padding:12px 12px 7px;
-    text-transform:uppercase;
-}
-
-.nav-item{
-    width:100%;
-    border:0;
-    background:transparent;
-    color:#dbe7f4;
-    text-align:left;
-    padding:12px;
-    border-radius:9px;
+.menu-item{
+    padding:12px 15px;
+    margin-bottom:5px;
+    border-radius:8px;
+    color:#cbd5e1;
     cursor:pointer;
-    font-size:14px;
-    margin-bottom:4px;
 }
 
-.nav-item:hover,
-.nav-item.active{
-    background:#17395f;
-    color:#fff;
-}
-
-.logout-btn{
-    margin:15px 10px;
-    width:calc(100% - 20px);
-    border:1px solid rgba(255,255,255,.15);
-    background:#132d4b;
-    color:#fff;
-    padding:11px;
-    border-radius:9px;
-    cursor:pointer;
+.menu-item:hover,
+.menu-item.active{
+    background:#1d4ed8;
+    color:white;
 }
 
 .main{
-    margin-left:245px;
-    width:calc(100% - 245px);
-    min-height:100vh;
+    margin-left:250px;
+    width:calc(100% - 250px);
 }
 
 .topbar{
-    height:72px;
-    background:#fff;
-    border-bottom:1px solid #e5eaf0;
+    height:70px;
+    background:white;
+    border-bottom:1px solid #e5e7eb;
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    padding:0 28px;
+    justify-content:space-between;
+    padding:0 25px;
     position:sticky;
     top:0;
-    z-index:10;
+    z-index:50;
 }
 
-.page-title{
-    font-size:21px;
-    font-weight:800;
-    color:#102b4b;
+.topbar-title{
+    font-size:22px;
+    font-weight:bold;
 }
 
 .user-info{
     display:flex;
     align-items:center;
-    gap:10px;
-    font-size:13px;
+    gap:12px;
 }
 
-.user-avatar{
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    background:#0f2747;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:800;
+.user-email{
+    font-size:14px;
+    color:#64748b;
 }
 
 .content{
     padding:25px;
 }
-
-/* =========================
-   PAGE
-========================= */
 
 .page{
     display:none;
@@ -268,27 +257,7 @@ button,input,select,textarea{
     display:block;
 }
 
-/* =========================
-   DASHBOARD CARDS
-========================= */
-
-.welcome{
-    background:linear-gradient(135deg,#0f2747,#1c4d7d);
-    color:#fff;
-    border-radius:18px;
-    padding:24px;
-    margin-bottom:22px;
-}
-
-.welcome h2{
-    font-size:23px;
-    margin-bottom:6px;
-}
-
-.welcome p{
-    color:#d8e7f6;
-}
-
+/* CARDS */
 .stats-grid{
     display:grid;
     grid-template-columns:repeat(5,1fr);
@@ -297,140 +266,65 @@ button,input,select,textarea{
 }
 
 .stat-card{
-    background:#fff;
-    border:1px solid #e5eaf0;
-    border-radius:15px;
-    padding:18px;
-    box-shadow:0 4px 14px rgba(15,39,71,.04);
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    box-shadow:0 3px 12px rgba(15,23,42,.06);
 }
 
-.stat-label{
+.stat-title{
     font-size:13px;
     color:#64748b;
-    font-weight:700;
+    margin-bottom:10px;
 }
 
-.stat-number{
-    font-size:29px;
-    font-weight:900;
-    margin-top:8px;
-    color:#102b4b;
+.stat-value{
+    font-size:30px;
+    font-weight:bold;
 }
 
-.stat-small{
-    margin-top:4px;
-    font-size:12px;
-    color:#94a3b8;
-}
-
-.dashboard-grid{
-    display:grid;
-    grid-template-columns:1.5fr 1fr;
-    gap:20px;
-}
+.stat-blue .stat-value{color:#2563eb;}
+.stat-green .stat-value{color:#16a34a;}
+.stat-orange .stat-value{color:#ea580c;}
+.stat-red .stat-value{color:#dc2626;}
+.stat-purple .stat-value{color:#7c3aed;}
 
 .panel{
-    background:#fff;
-    border:1px solid #e5eaf0;
-    border-radius:15px;
+    background:white;
+    border-radius:14px;
     padding:20px;
+    box-shadow:0 3px 12px rgba(15,23,42,.06);
     margin-bottom:20px;
 }
 
-.panel-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:16px;
-}
-
 .panel-title{
-    font-size:17px;
-    font-weight:800;
-    color:#17395f;
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
-.btn{
-    border:0;
-    border-radius:9px;
-    padding:10px 15px;
-    cursor:pointer;
-    font-weight:700;
-    font-size:13px;
-}
-
-.btn-primary{
-    background:#0f2747;
-    color:#fff;
-}
-
-.btn-primary:hover{
-    background:#173b67;
-}
-
-.btn-secondary{
-    background:#e9eef5;
-    color:#17395f;
-}
-
-.btn-success{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.btn-danger{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-.btn-warning{
-    background:#fef3c7;
-    color:#92400e;
-}
-
-/* =========================
-   TABLE
-========================= */
-
+/* TABLE */
 .table-wrap{
-    width:100%;
     overflow-x:auto;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:900px;
 }
 
-th{
-    background:#f7f9fc;
-    color:#475569;
-    font-size:12px;
-    text-align:left;
-    padding:12px;
-    border-bottom:1px solid #e5eaf0;
-}
-
+th,
 td{
-    padding:12px;
-    border-bottom:1px solid #edf0f4;
+    padding:11px 10px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
     font-size:13px;
     vertical-align:middle;
 }
 
-tr:hover td{
-    background:#fafcff;
-}
-
-.task-title{
-    font-weight:800;
-    color:#17395f;
-}
-
-.muted{
-    color:#64748b;
-    font-size:12px;
+th{
+    background:#f8fafc;
+    font-weight:bold;
 }
 
 .badge{
@@ -438,123 +332,100 @@ tr:hover td{
     padding:5px 9px;
     border-radius:20px;
     font-size:11px;
-    font-weight:800;
+    font-weight:bold;
     white-space:nowrap;
 }
 
-.status-TODO{
-    background:#e0f2fe;
-    color:#0369a1;
-}
+.status-HOLD{background:#fef3c7;color:#92400e;}
+.status-TODO{background:#e0e7ff;color:#3730a3;}
+.status-IN_PROGRESS{background:#dbeafe;color:#1d4ed8;}
+.status-REVIEW{background:#ede9fe;color:#6d28d9;}
+.status-WAIT_APPROVAL{background:#fce7f3;color:#9d174d;}
+.status-COMPLETED{background:#dcfce7;color:#166534;}
+.status-SUBMITTED{background:#cffafe;color:#155e75;}
+.status-CANCELLED{background:#fee2e2;color:#991b1b;}
 
-.status-IN_PROGRESS{
-    background:#fef3c7;
-    color:#92400e;
-}
+.priority-LOW{background:#f1f5f9;color:#475569;}
+.priority-MEDIUM{background:#fef3c7;color:#92400e;}
+.priority-HIGH{background:#ffedd5;color:#c2410c;}
+.priority-URGENT{background:#fee2e2;color:#991b1b;}
 
-.status-HOLD{
-    background:#f1f5f9;
-    color:#475569;
-}
-
-.status-REVIEW{
-    background:#ede9fe;
-    color:#6d28d9;
-}
-
-.status-WAIT_APPROVAL{
-    background:#fce7f3;
-    color:#9d174d;
-}
-
-.status-COMPLETED{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.status-SUBMITTED{
-    background:#dbeafe;
-    color:#1d4ed8;
-}
-
-.status-CANCELLED{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-.priority-LOW{
-    color:#64748b;
-}
-
-.priority-MEDIUM{
-    color:#0369a1;
-}
-
-.priority-HIGH{
-    color:#d97706;
-    font-weight:800;
-}
-
-.priority-URGENT{
+.overdue{
     color:#dc2626;
-    font-weight:900;
+    font-weight:bold;
 }
 
-/* =========================
-   FORM / MODAL
-========================= */
+/* FILTER */
+.filter-row{
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr auto;
+    gap:10px;
+    margin-bottom:18px;
+}
 
-.modal-overlay{
+.filter-row input,
+.filter-row select{
+    padding:11px;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+}
+
+/* PROGRESS */
+.progress{
+    width:100%;
+    height:8px;
+    background:#e5e7eb;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:#2563eb;
+}
+
+/* MODAL */
+.modal{
     position:fixed;
     inset:0;
-    background:rgba(2,8,23,.62);
+    background:rgba(15,23,42,.6);
     display:none;
-    align-items:center;
     justify-content:center;
-    z-index:100;
+    align-items:center;
     padding:20px;
+    z-index:200;
 }
 
-.modal-overlay.show{
+.modal.show{
     display:flex;
 }
 
-.modal{
-    width:800px;
-    max-width:100%;
-    max-height:92vh;
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:700px;
+    max-height:90vh;
     overflow-y:auto;
-    background:#fff;
-    border-radius:18px;
-    box-shadow:0 30px 80px rgba(0,0,0,.30);
+    border-radius:16px;
+    padding:25px;
 }
 
 .modal-header{
-    padding:20px 24px;
-    border-bottom:1px solid #e5eaf0;
     display:flex;
     justify-content:space-between;
     align-items:center;
+    margin-bottom:20px;
 }
 
-.modal-title{
-    font-size:19px;
-    font-weight:800;
-    color:#102b4b;
+.modal-header h2{
+    font-size:20px;
 }
 
 .close-btn{
-    border:0;
+    border:none;
     background:#f1f5f9;
-    width:34px;
-    height:34px;
-    border-radius:50%;
-    cursor:pointer;
-    font-size:18px;
-}
-
-.modal-body{
-    padding:24px;
+    border-radius:8px;
+    padding:8px 12px;
 }
 
 .form-grid{
@@ -564,60 +435,17 @@ tr:hover td{
 }
 
 .full{
-    grid-column:1 / -1;
+    grid-column:1/-1;
 }
 
-textarea.form-control{
-    min-height:100px;
-    resize:vertical;
-}
-
-.modal-footer{
-    padding:18px 24px;
-    border-top:1px solid #e5eaf0;
+.modal-actions{
     display:flex;
     justify-content:flex-end;
     gap:10px;
+    margin-top:20px;
 }
 
-/* =========================
-   FILTER
-========================= */
-
-.filter-bar{
-    display:grid;
-    grid-template-columns:2fr 1fr 1fr 1fr auto;
-    gap:10px;
-    margin-bottom:18px;
-}
-
-.empty{
-    text-align:center;
-    padding:45px 20px;
-    color:#94a3b8;
-}
-
-/* =========================
-   PROGRESS
-========================= */
-
-.progress-bar{
-    height:7px;
-    background:#e8edf3;
-    border-radius:10px;
-    overflow:hidden;
-}
-
-.progress-fill{
-    height:100%;
-    background:#2563eb;
-    border-radius:10px;
-}
-
-/* =========================
-   REPORT
-========================= */
-
+/* REPORT */
 .report-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -625,54 +453,49 @@ textarea.form-control{
 }
 
 .report-box{
-    background:#fff;
-    border:1px solid #e5eaf0;
-    border-radius:15px;
     padding:20px;
-}
-
-.report-box h3{
-    color:#17395f;
-    font-size:14px;
+    background:#f8fafc;
+    border-radius:12px;
 }
 
 .report-box strong{
     display:block;
-    font-size:28px;
-    margin-top:8px;
+    font-size:25px;
+    margin-top:5px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
+/* RESPONSIVE */
 @media(max-width:1100px){
     .stats-grid{
         grid-template-columns:repeat(3,1fr);
     }
 
-    .dashboard-grid{
-        grid-template-columns:1fr;
-    }
-
-    .filter-bar{
+    .filter-row{
         grid-template-columns:1fr 1fr;
-    }
-
-    .report-grid{
-        grid-template-columns:repeat(2,1fr);
     }
 }
 
-@media(max-width:750px){
+@media(max-width:800px){
     .sidebar{
-        width:0;
-        overflow:hidden;
+        width:70px;
+    }
+
+    .sidebar-logo{
+        padding:10px;
+    }
+
+    .sidebar-logo img{
+        width:50px;
+    }
+
+    .company-name,
+    .menu-text{
+        display:none;
     }
 
     .main{
-        margin-left:0;
-        width:100%;
+        margin-left:70px;
+        width:calc(100% - 70px);
     }
 
     .stats-grid{
@@ -686,443 +509,595 @@ textarea.form-control{
     .full{
         grid-column:auto;
     }
+}
 
+@media(max-width:550px){
     .content{
-        padding:15px;
+        padding:12px;
     }
 
     .topbar{
-        padding:0 15px;
+        padding:0 12px;
     }
-}
 
-@media(max-width:500px){
     .stats-grid{
         grid-template-columns:1fr;
     }
 
-    .report-grid{
+    .filter-row{
         grid-template-columns:1fr;
     }
 
-    .filter-bar{
-        grid-template-columns:1fr;
+    .user-email{
+        display:none;
     }
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- =====================================================
-     LOGIN
-===================================================== -->
+<!-- ================= LOGIN ================= -->
+<section id="loginPage">
 
-<div id="loginPage" class="login-page">
+    <div class="login-box">
 
-```
-<div class="login-box">
-
-    <div class="logo-box">
-        <img
-            src="2569-09-10_LOGO_MGRAND.png"
-            alt="M Grand Bio Tech">
-    </div>
-
-    <div class="login-title">
-        ENGINEERING DASHBOARD
-    </div>
-
-    <div class="login-subtitle">
-        M GRAND BIO TECH CO., LTD.
-    </div>
-
-    <div class="form-group">
-        <label>Username</label>
-        <input
-            id="loginUsername"
-            class="form-control"
-            type="text"
-            placeholder="Enter username">
-    </div>
-
-    <div class="form-group">
-        <label>Password</label>
-        <input
-            id="loginPassword"
-            class="form-control"
-            type="password"
-            placeholder="Enter password">
-    </div>
-
-    <button class="login-btn" onclick="login()">
-        LOGIN
-    </button>
-
-    <div id="loginError" class="login-error"></div>
-
-</div>
-```
-
-</div>
-
-<!-- =====================================================
-     APPLICATION
-===================================================== -->
-
-<div id="app" class="app hidden">
-
-```
-<!-- SIDEBAR -->
-
-<aside class="sidebar">
-
-    <div class="sidebar-logo">
-
-        <img
-            src="2569-09-10_LOGO_MGRAND.png"
-            alt="M Grand Bio Tech">
-
-        <div class="engineering-label">
-            FACTORY ENGINEERING
+        <div class="logo-box">
+            <img
+                src="2569-09-10_LOGO_MGRAND.png"
+                alt="M Grand Bio Tech">
         </div>
 
-    </div>
-
-    <div class="nav">
-
-        <div class="nav-title">
-            MAIN
+        <div class="login-title">
+            M GRAND ENGINEERING
         </div>
 
-        <button
-            class="nav-item active"
-            onclick="showPage('dashboard',this)">
-            🏠 Dashboard
-        </button>
-
-        <button
-            class="nav-item"
-            onclick="showPage('tasks',this)">
-            📋 งานวิศวกรรม
-        </button>
-
-        <button
-            class="nav-item"
-            onclick="openTaskModal()">
-            ➕ เพิ่มงานใหม่
-        </button>
-
-        <div class="nav-title">
-            REPORT
+        <div class="login-subtitle">
+            Factory Engineer Dashboard
         </div>
 
-        <button
-            class="nav-item"
-            onclick="showPage('daily',this)">
-            📅 Daily Work
-        </button>
+        <form id="loginForm">
 
-        <button
-            class="nav-item"
-            onclick="showPage('weekly',this)">
-            📊 Weekly Report
-        </button>
-
-        <button
-            class="nav-item"
-            onclick="showPage('monthly',this)">
-            📈 Monthly Report
-        </button>
-
-        <button
-            class="nav-item"
-            onclick="showPage('yearly',this)">
-            📆 Yearly Performance
-        </button>
-
-        <div class="nav-title">
-            ENGINEERING
-        </div>
-
-        <button
-            class="nav-item"
-            onclick="showPage('portfolio',this)">
-            🏭 Work Portfolio
-        </button>
-
-        <button
-            class="nav-item"
-            onclick="showPage('machine',this)">
-            ⚙️ Machine / Asset
-        </button>
-
-        <button
-            class="nav-item"
-            onclick="showPage('kpi',this)">
-            🎯 KPI & Analytics
-        </button>
-
-    </div>
-
-    <button class="logout-btn" onclick="logout()">
-        🚪 Logout
-    </button>
-
-</aside>
-
-
-<!-- MAIN -->
-
-<main class="main">
-
-    <header class="topbar">
-
-        <div class="page-title" id="pageTitle">
-            Engineering Dashboard
-        </div>
-
-        <div class="user-info">
-
-            <div>
-                <strong id="currentUserName">
-                    Admin
-                </strong>
-                <div class="muted">
-                    Engineering
-                </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="Engineer Email"
+                    required>
             </div>
 
-            <div class="user-avatar">
-                EN
+            <div class="form-group">
+                <label>Password</label>
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Password"
+                    required>
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-full">
+                LOGIN
+            </button>
+
+            <div
+                id="loginError"
+                class="login-error">
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- ================= APPLICATION ================= -->
+<section id="appPage" class="hidden">
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <img
+                src="2569-09-10_LOGO_MGRAND.png"
+                alt="M Grand Bio Tech">
+
+            <div class="company-name">
+                M GRAND BIO TECH
             </div>
 
         </div>
 
-    </header>
+        <nav class="menu">
+
+            <div
+                class="menu-item active"
+                data-page="dashboardPage">
+                📊 <span class="menu-text">Dashboard</span>
+            </div>
+
+            <div
+                class="menu-item"
+                data-page="tasksPage">
+                📋 <span class="menu-text">Daily Work</span>
+            </div>
+
+            <div
+                class="menu-item"
+                data-page="weeklyPage">
+                📅 <span class="menu-text">Weekly Report</span>
+            </div>
+
+            <div
+                class="menu-item"
+                data-page="monthlyPage">
+                📈 <span class="menu-text">Monthly Report</span>
+            </div>
+
+            <div
+                class="menu-item"
+                data-page="yearlyPage">
+                📊 <span class="menu-text">Yearly Performance</span>
+            </div>
+
+            <div
+                class="menu-item"
+                data-page="portfolioPage">
+                🗂️ <span class="menu-text">Work Portfolio</span>
+            </div>
+
+            <div
+                class="menu-item"
+                data-page="machinePage">
+                ⚙️ <span class="menu-text">Machine / Asset</span>
+            </div>
+
+            <div
+                class="menu-item"
+                data-page="kpiPage">
+                🎯 <span class="menu-text">KPI & Analytics</span>
+            </div>
+
+        </nav>
+
+    </aside>
 
 
-    <div class="content">
+    <!-- MAIN -->
+    <main class="main">
 
+        <header class="topbar">
 
-        <!-- =================================================
-             DASHBOARD
-        ================================================== -->
+            <div
+                id="pageTitle"
+                class="topbar-title">
+                Dashboard
+            </div>
 
-        <section id="dashboardPage" class="page active">
+            <div class="user-info">
 
-            <div class="welcome">
+                <span
+                    id="currentUser"
+                    class="user-email">
+                    -
+                </span>
 
-                <h2>
-                    Factory Engineering Dashboard
-                </h2>
-
-                <p>
-                    ระบบบริหารจัดการงานวิศวกรรมและติดตามประสิทธิภาพงาน
-                </p>
+                <button
+                    id="logoutBtn"
+                    class="btn btn-danger">
+                    Logout
+                </button>
 
             </div>
 
+        </header>
 
-            <div class="stats-grid">
 
-                <div class="stat-card">
-                    <div class="stat-label">
-                        งานทั้งหมด
+        <div class="content">
+
+            <!-- ================= DASHBOARD ================= -->
+            <section
+                id="dashboardPage"
+                class="page active">
+
+                <div class="stats-grid">
+
+                    <div class="stat-card stat-blue">
+                        <div class="stat-title">Total Work</div>
+                        <div id="totalTasks" class="stat-value">0</div>
                     </div>
-                    <div class="stat-number" id="totalTasks">
-                        0
+
+                    <div class="stat-card stat-green">
+                        <div class="stat-title">Completed</div>
+                        <div id="completedTasks" class="stat-value">0</div>
                     </div>
-                    <div class="stat-small">
-                        Total Tasks
+
+                    <div class="stat-card stat-orange">
+                        <div class="stat-title">In Progress</div>
+                        <div id="progressTasks" class="stat-value">0</div>
                     </div>
+
+                    <div class="stat-card stat-red">
+                        <div class="stat-title">Overdue</div>
+                        <div id="overdueTasks" class="stat-value">0</div>
+                    </div>
+
+                    <div class="stat-card stat-purple">
+                        <div class="stat-title">Completion Rate</div>
+                        <div id="completionRate" class="stat-value">0%</div>
+                    </div>
+
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-label">
-                        TODO
-                    </div>
-                    <div class="stat-number" id="todoTasks">
-                        0
-                    </div>
-                    <div class="stat-small">
-                        งานที่ต้องทำ
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-label">
-                        IN PROGRESS
-                    </div>
-                    <div class="stat-number" id="progressTasks">
-                        0
-                    </div>
-                    <div class="stat-small">
-                        กำลังดำเนินการ
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-label">
-                        COMPLETED
-                    </div>
-                    <div class="stat-number" id="completedTasks">
-                        0
-                    </div>
-                    <div class="stat-small">
-                        งานเสร็จแล้ว
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-label">
-                        OVERDUE
-                    </div>
-                    <div class="stat-number" id="overdueTasks">
-                        0
-                    </div>
-                    <div class="stat-small">
-                        เกินกำหนด
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="dashboard-grid">
 
                 <div class="panel">
 
-                    <div class="panel-header">
+                    <div class="panel-title">
+                        งานล่าสุด
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>งาน</th>
+                                    <th>ประเภท</th>
+                                    <th>สถานะ</th>
+                                    <th>Priority</th>
+                                    <th>Progress</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recentTasksBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        สรุปสถานะงาน
+                    </div>
+
+                    <div
+                        id="statusSummary"
+                        class="report-grid">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= TASKS ================= -->
+            <section
+                id="tasksPage"
+                class="page">
+
+                <div class="panel">
+
+                    <div
+                        style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        margin-bottom:15px;
+                        gap:10px;
+                        flex-wrap:wrap;">
 
                         <div class="panel-title">
-                            งานล่าสุด
+                            Daily Work
                         </div>
 
                         <button
-                            class="btn btn-primary"
-                            onclick="openTaskModal()">
+                            id="addTaskBtn"
+                            class="btn btn-primary">
                             + เพิ่มงาน
                         </button>
 
                     </div>
 
-                    <div id="recentTasks"></div>
 
-                </div>
+                    <div class="filter-row">
 
+                        <input
+                            id="searchInput"
+                            type="text"
+                            placeholder="ค้นหางาน...">
 
-                <div>
+                        <select id="filterStatus">
+                            <option value="">ทุกสถานะ</option>
+                            <option value="HOLD">HOLD</option>
+                            <option value="TODO">TODO</option>
+                            <option value="IN_PROGRESS">IN PROGRESS</option>
+                            <option value="REVIEW">REVIEW</option>
+                            <option value="WAIT_APPROVAL">WAIT APPROVAL</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="SUBMITTED">SUBMITTED</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                        </select>
 
-                    <div class="panel">
+                        <select id="filterPriority">
+                            <option value="">ทุก Priority</option>
+                            <option value="LOW">LOW</option>
+                            <option value="MEDIUM">MEDIUM</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="URGENT">URGENT</option>
+                        </select>
 
-                        <div class="panel-header">
+                        <select id="filterType">
+                            <option value="">ทุกประเภท</option>
+                            <option value="PM">PM</option>
+                            <option value="CM">CM</option>
+                            <option value="INSPECTION">INSPECTION</option>
+                            <option value="IMPROVEMENT">IMPROVEMENT</option>
+                            <option value="PROJECT">PROJECT</option>
+                            <option value="INSTALLATION">INSTALLATION</option>
+                            <option value="UTILITY">UTILITY</option>
+                            <option value="ELECTRICAL">ELECTRICAL</option>
+                            <option value="HVAC">HVAC</option>
+                            <option value="SAFETY">SAFETY</option>
+                            <option value="DOCUMENT">DOCUMENT</option>
+                            <option value="SUPPLIER">SUPPLIER</option>
+                            <option value="OTHER">OTHER</option>
+                        </select>
 
-                            <div class="panel-title">
-                                สถานะงาน
-                            </div>
-
-                        </div>
-
-                        <div id="statusSummary"></div>
+                        <button
+                            id="refreshBtn"
+                            class="btn btn-secondary">
+                            Refresh
+                        </button>
 
                     </div>
 
 
-                    <div class="panel">
+                    <div class="table-wrap">
 
-                        <div class="panel-header">
+                        <table>
 
-                            <div class="panel-title">
-                                Priority
-                            </div>
+                            <thead>
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                    <th>Due</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
 
-                        </div>
+                            <tbody id="tasksBody"></tbody>
 
-                        <div id="prioritySummary"></div>
+                        </table>
 
                     </div>
 
                 </div>
 
-            </div>
-
-        </section>
+            </section>
 
 
-        <!-- =================================================
-             TASKS
-        ================================================== -->
+            <!-- ================= WEEKLY ================= -->
+            <section
+                id="weeklyPage"
+                class="page">
 
-        <section id="tasksPage" class="page">
+                <div class="panel">
 
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <div>
-                        <div class="panel-title">
-                            งานวิศวกรรมทั้งหมด
-                        </div>
-                        <div class="muted">
-                            Engineering Work Management
-                        </div>
+                    <div class="panel-title">
+                        Weekly Report
                     </div>
 
-                    <button
-                        class="btn btn-primary"
-                        onclick="openTaskModal()">
-                        + เพิ่มงานใหม่
-                    </button>
+                    <div
+                        id="weeklyReport"
+                        class="report-grid">
+                    </div>
 
                 </div>
 
+            </section>
 
-                <div class="filter-bar">
+
+            <!-- ================= MONTHLY ================= -->
+            <section
+                id="monthlyPage"
+                class="page">
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        Monthly Report
+                    </div>
+
+                    <div
+                        id="monthlyReport"
+                        class="report-grid">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= YEARLY ================= -->
+            <section
+                id="yearlyPage"
+                class="page">
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        Yearly Performance
+                    </div>
+
+                    <div
+                        id="yearlyReport"
+                        class="report-grid">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= PORTFOLIO ================= -->
+            <section
+                id="portfolioPage"
+                class="page">
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        Work Portfolio
+                    </div>
+
+                    <div
+                        id="portfolioReport"
+                        class="report-grid">
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= MACHINE ================= -->
+            <section
+                id="machinePage"
+                class="page">
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        Machine / Asset
+                    </div>
+
+                    <p style="color:#64748b;">
+                        ระบบ Machine / Asset จะเชื่อมต่อกับฐานข้อมูลเครื่องจักรในขั้นตอนถัดไป
+                    </p>
+
+                    <br>
+
+                    <div class="report-grid">
+
+                        <div class="report-box">
+                            Machine Code
+                            <strong>MC-CAP-001</strong>
+                        </div>
+
+                        <div class="report-box">
+                            Asset Code
+                            <strong>AC-FAC-001</strong>
+                        </div>
+
+                        <div class="report-box">
+                            Factory
+                            <strong>1000 kVA</strong>
+                        </div>
+
+                        <div class="report-box">
+                            Engineering
+                            <strong>ACTIVE</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= KPI ================= -->
+            <section
+                id="kpiPage"
+                class="page">
+
+                <div class="panel">
+
+                    <div class="panel-title">
+                        KPI & Analytics
+                    </div>
+
+                    <div
+                        id="kpiReport"
+                        class="report-grid">
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+</section>
+
+
+<!-- ================= TASK MODAL ================= -->
+<div
+    id="taskModal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                เพิ่มงาน
+            </h2>
+
+            <button
+                id="closeModalBtn"
+                class="close-btn">
+                ✕
+            </button>
+
+        </div>
+
+
+        <form id="taskForm">
+
+            <input
+                type="hidden"
+                id="taskId">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+
+                    <label>ชื่องาน *</label>
 
                     <input
-                        id="searchTask"
-                        class="form-control"
-                        placeholder="🔎 ค้นหาชื่องาน / เครื่อง / ผู้รับผิดชอบ"
-                        oninput="renderTasks()">
+                        id="taskTitle"
+                        required
+                        placeholder="เช่น ตรวจสอบ Compressor">
 
-                    <select
-                        id="filterStatus"
-                        class="form-control"
-                        onchange="renderTasks()">
+                </div>
 
-                        <option value="">ทุกสถานะ</option>
-                        <option value="TODO">TODO</option>
-                        <option value="IN_PROGRESS">IN PROGRESS</option>
-                        <option value="HOLD">HOLD</option>
-                        <option value="REVIEW">REVIEW</option>
-                        <option value="WAIT_APPROVAL">WAIT APPROVAL</option>
-                        <option value="COMPLETED">COMPLETED</option>
-                        <option value="SUBMITTED">SUBMITTED</option>
-                        <option value="CANCELLED">CANCELLED</option>
 
-                    </select>
+                <div class="form-group">
 
-                    <select
-                        id="filterPriority"
-                        class="form-control"
-                        onchange="renderTasks()">
+                    <label>Work Type</label>
 
-                        <option value="">ทุก Priority</option>
-                        <option value="LOW">LOW</option>
-                        <option value="MEDIUM">MEDIUM</option>
-                        <option value="HIGH">HIGH</option>
-                        <option value="URGENT">URGENT</option>
+                    <select id="taskType">
 
-                    </select>
-
-                    <select
-                        id="filterType"
-                        class="form-control"
-                        onchange="renderTasks()">
-
-                        <option value="">ทุกประเภท</option>
                         <option value="PM">PM</option>
                         <option value="CM">CM</option>
                         <option value="INSPECTION">INSPECTION</option>
@@ -1139,1142 +1114,1487 @@ textarea.form-control{
 
                     </select>
 
-                    <button
-                        class="btn btn-secondary"
-                        onclick="resetFilters()">
-                        Reset
-                    </button>
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Priority</label>
+
+                    <select id="taskPriority">
+
+                        <option value="LOW">LOW</option>
+                        <option value="MEDIUM" selected>MEDIUM</option>
+                        <option value="HIGH">HIGH</option>
+                        <option value="URGENT">URGENT</option>
+
+                    </select>
 
                 </div>
 
 
-                <div class="table-wrap">
+                <div class="form-group">
 
-                    <table>
+                    <label>Status</label>
 
-                        <thead>
+                    <select id="taskStatus">
 
-                            <tr>
-                                <th>งาน</th>
-                                <th>ประเภท</th>
-                                <th>Machine / Asset</th>
-                                <th>ผู้รับผิดชอบ</th>
-                                <th>Priority</th>
-                                <th>Status</th>
-                                <th>Due Date</th>
-                                <th>Action</th>
-                            </tr>
+                        <option value="HOLD">HOLD</option>
+                        <option value="TODO" selected>TODO</option>
+                        <option value="IN_PROGRESS">IN PROGRESS</option>
+                        <option value="REVIEW">REVIEW</option>
+                        <option value="WAIT_APPROVAL">WAIT APPROVAL</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                        <option value="SUBMITTED">SUBMITTED</option>
+                        <option value="CANCELLED">CANCELLED</option>
 
-                        </thead>
-
-                        <tbody id="taskTableBody"></tbody>
-
-                    </table>
+                    </select>
 
                 </div>
 
-            </div>
 
-        </section>
+                <div class="form-group">
 
+                    <label>Progress %</label>
 
-        <!-- =================================================
-             DAILY
-        ================================================== -->
-
-        <section id="dailyPage" class="page">
-
-            <div class="panel">
-
-                <div class="panel-header">
-                    <div class="panel-title">
-                        Daily Work
-                    </div>
-
-                    <button
-                        class="btn btn-primary"
-                        onclick="openTaskModal()">
-                        + เพิ่มงาน
-                    </button>
-                </div>
-
-                <div id="dailyContent"></div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             WEEKLY
-        ================================================== -->
-
-        <section id="weeklyPage" class="page">
-
-            <div class="panel">
-
-                <div class="panel-header">
-                    <div class="panel-title">
-                        Weekly Report
-                    </div>
-                </div>
-
-                <div class="report-grid">
-
-                    <div class="report-box">
-                        <h3>งานทั้งหมด</h3>
-                        <strong id="weeklyTotal">0</strong>
-                    </div>
-
-                    <div class="report-box">
-                        <h3>Completed</h3>
-                        <strong id="weeklyCompleted">0</strong>
-                    </div>
-
-                    <div class="report-box">
-                        <h3>In Progress</h3>
-                        <strong id="weeklyProgress">0</strong>
-                    </div>
-
-                    <div class="report-box">
-                        <h3>Overdue</h3>
-                        <strong id="weeklyOverdue">0</strong>
-                    </div>
+                    <input
+                        id="taskProgress"
+                        type="number"
+                        min="0"
+                        max="100"
+                        value="0">
 
                 </div>
 
-            </div>
 
-        </section>
+                <div class="form-group">
 
+                    <label>Machine No.</label>
 
-        <!-- =================================================
-             MONTHLY
-        ================================================== -->
+                    <input
+                        id="taskMachine"
+                        placeholder="MC-CAP-001">
 
-        <section id="monthlyPage" class="page">
-
-            <div class="panel">
-
-                <div class="panel-header">
-                    <div class="panel-title">
-                        Monthly Report
-                    </div>
                 </div>
 
-                <div id="monthlyContent"></div>
 
-            </div>
+                <div class="form-group">
 
-        </section>
+                    <label>Location</label>
 
+                    <input
+                        id="taskLocation"
+                        placeholder="Factory / Lab / Office">
 
-        <!-- =================================================
-             YEARLY
-        ================================================== -->
-
-        <section id="yearlyPage" class="page">
-
-            <div class="panel">
-
-                <div class="panel-header">
-                    <div class="panel-title">
-                        Yearly Performance
-                    </div>
                 </div>
 
-                <div class="report-grid">
 
-                    <div class="report-box">
-                        <h3>Total Work</h3>
-                        <strong id="yearTotal">0</strong>
-                    </div>
+                <div class="form-group">
 
-                    <div class="report-box">
-                        <h3>Completed</h3>
-                        <strong id="yearCompleted">0</strong>
-                    </div>
+                    <label>Start Date</label>
 
-                    <div class="report-box">
-                        <h3>Completion Rate</h3>
-                        <strong id="completionRate">0%</strong>
-                    </div>
+                    <input
+                        id="taskStartDate"
+                        type="date">
 
-                    <div class="report-box">
-                        <h3>Overdue</h3>
-                        <strong id="yearOverdue">0</strong>
-                    </div>
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Due Date</label>
+
+                    <input
+                        id="taskDueDate"
+                        type="date">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Actual Hours</label>
+
+                    <input
+                        id="taskHours"
+                        type="number"
+                        min="0"
+                        step="0.5"
+                        value="0">
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>รายละเอียดงาน</label>
+
+                    <textarea
+                        id="taskDescription"
+                        rows="4"
+                        placeholder="รายละเอียด / ผลการดำเนินงาน">
+                    </textarea>
 
                 </div>
 
             </div>
 
-        </section>
 
+            <div class="modal-actions">
 
-        <!-- =================================================
-             PORTFOLIO
-        ================================================== -->
+                <button
+                    type="button"
+                    id="cancelTaskBtn"
+                    class="btn btn-secondary">
+                    ยกเลิก
+                </button>
 
-        <section id="portfolioPage" class="page">
-
-            <div class="panel">
-
-                <div class="panel-header">
-                    <div class="panel-title">
-                        Engineering Work Portfolio
-                    </div>
-                </div>
-
-                <div id="portfolioContent"></div>
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+                    บันทึกงาน
+                </button>
 
             </div>
 
-        </section>
-
-
-        <!-- =================================================
-             MACHINE
-        ================================================== -->
-
-        <section id="machinePage" class="page">
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <div>
-                        <div class="panel-title">
-                            Machine / Asset
-                        </div>
-
-                        <div class="muted">
-                            ระบบทะเบียนเครื่องจักรและทรัพย์สิน
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="empty">
-                    เตรียมเชื่อมระบบ Machine / Asset
-                    เช่น MC-CAP-001, AC_FAC_001
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             KPI
-        ================================================== -->
-
-        <section id="kpiPage" class="page">
-
-            <div class="panel">
-
-                <div class="panel-header">
-                    <div class="panel-title">
-                        KPI & Analytics
-                    </div>
-                </div>
-
-                <div class="report-grid">
-
-                    <div class="report-box">
-                        <h3>Completion Rate</h3>
-                        <strong id="kpiCompletion">0%</strong>
-                    </div>
-
-                    <div class="report-box">
-                        <h3>On-Time Rate</h3>
-                        <strong id="kpiOnTime">0%</strong>
-                    </div>
-
-                    <div class="report-box">
-                        <h3>Overdue Rate</h3>
-                        <strong id="kpiOverdue">0%</strong>
-                    </div>
-
-                    <div class="report-box">
-                        <h3>Total Work</h3>
-                        <strong id="kpiTotal">0</strong>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </div>
-
-</main>
-```
-
-</div>
-
-<!-- =====================================================
-     ADD / EDIT TASK MODAL
-===================================================== -->
-
-<div id="taskModal" class="modal-overlay">
-
-```
-<div class="modal">
-
-    <div class="modal-header">
-
-        <div class="modal-title" id="modalTitle">
-            เพิ่มงานใหม่
-        </div>
-
-        <button
-            class="close-btn"
-            onclick="closeTaskModal()">
-            ×
-        </button>
-
-    </div>
-
-
-    <div class="modal-body">
-
-        <div class="form-grid">
-
-            <div class="full form-group">
-
-                <label>
-                    ชื่องาน *
-                </label>
-
-                <input
-                    id="taskTitle"
-                    class="form-control"
-                    placeholder="เช่น ตรวจสอบ Compressor ห้อง Utility">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Work Type
-                </label>
-
-                <select id="taskType" class="form-control">
-
-                    <option value="PM">PM</option>
-                    <option value="CM">CM</option>
-                    <option value="INSPECTION">INSPECTION</option>
-                    <option value="IMPROVEMENT">IMPROVEMENT</option>
-                    <option value="PROJECT">PROJECT</option>
-                    <option value="INSTALLATION">INSTALLATION</option>
-                    <option value="UTILITY">UTILITY</option>
-                    <option value="ELECTRICAL">ELECTRICAL</option>
-                    <option value="HVAC">HVAC</option>
-                    <option value="SAFETY">SAFETY</option>
-                    <option value="DOCUMENT">DOCUMENT</option>
-                    <option value="SUPPLIER">SUPPLIER</option>
-                    <option value="OTHER">OTHER</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Machine / Asset
-                </label>
-
-                <input
-                    id="taskMachine"
-                    class="form-control"
-                    placeholder="เช่น MC-CAP-001">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Location
-                </label>
-
-                <input
-                    id="taskLocation"
-                    class="form-control"
-                    placeholder="เช่น Production / Utility / LAB">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    ผู้รับผิดชอบ
-                </label>
-
-                <input
-                    id="taskAssignee"
-                    class="form-control"
-                    placeholder="ชื่อผู้รับผิดชอบ">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Priority
-                </label>
-
-                <select id="taskPriority" class="form-control">
-
-                    <option value="LOW">LOW</option>
-                    <option value="MEDIUM" selected>MEDIUM</option>
-                    <option value="HIGH">HIGH</option>
-                    <option value="URGENT">URGENT</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Status
-                </label>
-
-                <select id="taskStatus" class="form-control">
-
-                    <option value="TODO">TODO</option>
-                    <option value="IN_PROGRESS">IN PROGRESS</option>
-                    <option value="HOLD">HOLD</option>
-                    <option value="REVIEW">REVIEW</option>
-                    <option value="WAIT_APPROVAL">WAIT APPROVAL</option>
-                    <option value="COMPLETED">COMPLETED</option>
-                    <option value="SUBMITTED">SUBMITTED</option>
-                    <option value="CANCELLED">CANCELLED</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    วันที่เริ่ม
-                </label>
-
-                <input
-                    id="taskStartDate"
-                    class="form-control"
-                    type="date">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Due Date
-                </label>
-
-                <input
-                    id="taskDueDate"
-                    class="form-control"
-                    type="date">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Progress %
-                </label>
-
-                <input
-                    id="taskProgress"
-                    class="form-control"
-                    type="number"
-                    min="0"
-                    max="100"
-                    value="0">
-
-            </div>
-
-
-            <div class="full form-group">
-
-                <label>
-                    รายละเอียดงาน
-                </label>
-
-                <textarea
-                    id="taskDescription"
-                    class="form-control"
-                    placeholder="รายละเอียด / ปัญหา / สิ่งที่ต้องดำเนินการ"></textarea>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="modal-footer">
-
-        <button
-            class="btn btn-secondary"
-            onclick="closeTaskModal()">
-            ยกเลิก
-        </button>
-
-        <button
-            class="btn btn-primary"
-            onclick="saveTask()">
-            💾 บันทึกงาน
-        </button>
+        </form>
 
     </div>
 
 </div>
-```
 
-</div>
 
 <script>
 
-/* =====================================================
-   CONFIG
-===================================================== */
+/* =========================================================
+   SUPABASE CONFIGURATION
+   ========================================================= */
 
-const STORAGE_KEY = "mgrand_engineering_tasks";
+const SUPABASE_URL =
+    "https://cwwfseivlkhtxrvagywx.supabase.co";
 
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_BBHdl-ufLpkhKe65BsIIvA_v4gQdI85";
+
+const { createClient } = supabase;
+
+const db = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+   ========================================================= */
+
+let tasks = [];
 let editingTaskId = null;
 
 
-/* =====================================================
-   DEMO DATA
-   ใช้เฉพาะกรณีที่ยังไม่มีข้อมูลในเครื่อง
-===================================================== */
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
 
-const demoTasks = [
+const loginPage = document.getElementById("loginPage");
+const appPage = document.getElementById("appPage");
 
-    {
-        id: 1,
-        title: "ตรวจสอบ Compressor ระบบลม",
-        type: "UTILITY",
-        machine: "AIR-COMP-001",
-        location: "Utility Room",
-        assignee: "Engineering",
-        priority: "HIGH",
-        status: "IN_PROGRESS",
-        startDate: "2026-09-29",
-        dueDate: "2026-10-02",
-        progress: 60,
-        description: "ตรวจสอบ Oil Free และ Oil Flooded System",
-        createdAt: "2026-09-29"
-    },
+const loginForm = document.getElementById("loginForm");
+const loginError = document.getElementById("loginError");
 
-    {
-        id: 2,
-        title: "PM เครื่อง Capsule Press",
-        type: "PM",
-        machine: "MC-CAP-001",
-        location: "Production",
-        assignee: "Engineering",
-        priority: "MEDIUM",
-        status: "TODO",
-        startDate: "2026-10-01",
-        dueDate: "2026-10-03",
-        progress: 0,
-        description: "ตรวจสอบตาม PM Checklist",
-        createdAt: "2026-09-29"
-    },
+const currentUser = document.getElementById("currentUser");
 
-    {
-        id: 3,
-        title: "ตรวจสอบแอร์ LAB",
-        type: "HVAC",
-        machine: "AC_LAB_001",
-        location: "LAB",
-        assignee: "Engineering",
-        priority: "MEDIUM",
-        status: "COMPLETED",
-        startDate: "2026-09-27",
-        dueDate: "2026-09-28",
-        progress: 100,
-        description: "ตรวจสอบการทำงานและอุณหภูมิ",
-        createdAt: "2026-09-27"
-    }
-
-];
+const taskModal = document.getElementById("taskModal");
+const taskForm = document.getElementById("taskForm");
 
 
-/* =====================================================
-   DATA
-===================================================== */
-
-function getTasks(){
-
-    const data = localStorage.getItem(STORAGE_KEY);
-
-    if(!data){
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(demoTasks)
-        );
-
-        return [...demoTasks];
-    }
-
-    try{
-        return JSON.parse(data);
-    }catch(e){
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify([])
-        );
-
-        return [];
-    }
-}
-
-
-function saveTasks(tasks){
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(tasks)
-    );
-
-}
-
-
-/* =====================================================
+/* =========================================================
    LOGIN
-===================================================== */
+   ========================================================= */
 
-function login(){
+loginForm.addEventListener("submit", async function(e){
 
-    const username =
-        document.getElementById("loginUsername").value.trim();
+    e.preventDefault();
+
+    loginError.textContent = "กำลังเข้าสู่ระบบ...";
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
 
     const password =
         document.getElementById("loginPassword").value;
 
-    if(username === "admin" && password === "1234"){
+    const { data, error } =
+        await db.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
 
-        localStorage.setItem(
-            "mgrand_logged_in",
-            "true"
-        );
+    if(error){
 
-        localStorage.setItem(
-            "mgrand_user",
-            username
-        );
+        console.error(error);
 
-        showApp();
-
-    }else{
-
-        document.getElementById("loginError").textContent =
-            "Username หรือ Password ไม่ถูกต้อง";
-
-    }
-
-}
-
-
-function showApp(){
-
-    document
-        .getElementById("loginPage")
-        .classList.add("hidden");
-
-    document
-        .getElementById("app")
-        .classList.remove("hidden");
-
-    const user =
-        localStorage.getItem("mgrand_user") || "Admin";
-
-    document
-        .getElementById("currentUserName")
-        .textContent = user;
-
-    refreshAll();
-
-}
-
-
-function logout(){
-
-    localStorage.removeItem(
-        "mgrand_logged_in"
-    );
-
-    location.reload();
-
-}
-
-
-/* =====================================================
-   PAGE NAVIGATION
-===================================================== */
-
-const pageTitles = {
-
-    dashboard:
-        "Engineering Dashboard",
-
-    tasks:
-        "งานวิศวกรรม",
-
-    daily:
-        "Daily Work",
-
-    weekly:
-        "Weekly Report",
-
-    monthly:
-        "Monthly Report",
-
-    yearly:
-        "Yearly Performance",
-
-    portfolio:
-        "Work Portfolio",
-
-    machine:
-        "Machine / Asset",
-
-    kpi:
-        "KPI & Analytics"
-
-};
-
-
-function showPage(page,button){
-
-    document
-        .querySelectorAll(".page")
-        .forEach(p => p.classList.remove("active"));
-
-    const target =
-        document.getElementById(page + "Page");
-
-    if(target){
-        target.classList.add("active");
-    }
-
-    document
-        .querySelectorAll(".nav-item")
-        .forEach(item => item.classList.remove("active"));
-
-    if(button){
-        button.classList.add("active");
-    }
-
-    document
-        .getElementById("pageTitle")
-        .textContent =
-            pageTitles[page] || "Engineering Dashboard";
-
-    refreshAll();
-
-}
-
-
-/* =====================================================
-   MODAL
-===================================================== */
-
-function openTaskModal(taskId = null){
-
-    editingTaskId = taskId;
-
-    clearTaskForm();
-
-    if(taskId !== null){
-
-        const tasks = getTasks();
-
-        const task =
-            tasks.find(t => String(t.id) === String(taskId));
-
-        if(!task){
-            return;
-        }
-
-        document
-            .getElementById("modalTitle")
-            .textContent = "แก้ไขงาน";
-
-        document
-            .getElementById("taskTitle")
-            .value = task.title || "";
-
-        document
-            .getElementById("taskType")
-            .value = task.type || "OTHER";
-
-        document
-            .getElementById("taskMachine")
-            .value = task.machine || "";
-
-        document
-            .getElementById("taskLocation")
-            .value = task.location || "";
-
-        document
-            .getElementById("taskAssignee")
-            .value = task.assignee || "";
-
-        document
-            .getElementById("taskPriority")
-            .value = task.priority || "MEDIUM";
-
-        document
-            .getElementById("taskStatus")
-            .value = task.status || "TODO";
-
-        document
-            .getElementById("taskStartDate")
-            .value = task.startDate || "";
-
-        document
-            .getElementById("taskDueDate")
-            .value = task.dueDate || "";
-
-        document
-            .getElementById("taskProgress")
-            .value = task.progress || 0;
-
-        document
-            .getElementById("taskDescription")
-            .value = task.description || "";
-
-    }else{
-
-        document
-            .getElementById("modalTitle")
-            .textContent = "เพิ่มงานใหม่";
-
-        const today =
-            new Date().toISOString().split("T")[0];
-
-        document
-            .getElementById("taskStartDate")
-            .value = today;
-
-    }
-
-    document
-        .getElementById("taskModal")
-        .classList.add("show");
-
-}
-
-
-function closeTaskModal(){
-
-    document
-        .getElementById("taskModal")
-        .classList.remove("show");
-
-    editingTaskId = null;
-
-}
-
-
-function clearTaskForm(){
-
-    [
-        "taskTitle",
-        "taskMachine",
-        "taskLocation",
-        "taskAssignee",
-        "taskStartDate",
-        "taskDueDate",
-        "taskDescription"
-    ].forEach(id => {
-
-        document.getElementById(id).value = "";
-
-    });
-
-    document
-        .getElementById("taskType")
-        .value = "PM";
-
-    document
-        .getElementById("taskPriority")
-        .value = "MEDIUM";
-
-    document
-        .getElementById("taskStatus")
-        .value = "TODO";
-
-    document
-        .getElementById("taskProgress")
-        .value = 0;
-
-}
-
-
-/* =====================================================
-   SAVE TASK
-===================================================== */
-
-function saveTask(){
-
-    const title =
-        document
-            .getElementById("taskTitle")
-            .value
-            .trim();
-
-    if(!title){
-
-        alert("กรุณากรอกชื่องาน");
+        loginError.textContent =
+            "เข้าสู่ระบบไม่สำเร็จ: " + error.message;
 
         return;
-
     }
 
-    let progress =
-        Number(
-            document
-                .getElementById("taskProgress")
-                .value
+    loginError.textContent = "";
+
+    showApp(data.user);
+
+});
+
+
+/* =========================================================
+   AUTH STATE
+   ========================================================= */
+
+db.auth.onAuthStateChange(
+    async function(event, session){
+
+        if(session && session.user){
+
+            showApp(session.user);
+
+        }else{
+
+            showLogin();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SHOW LOGIN
+   ========================================================= */
+
+function showLogin(){
+
+    loginPage.classList.remove("hidden");
+    appPage.classList.add("hidden");
+
+}
+
+
+/* =========================================================
+   SHOW APP
+   ========================================================= */
+
+async function showApp(user){
+
+    loginPage.classList.add("hidden");
+    appPage.classList.remove("hidden");
+
+    currentUser.textContent =
+        user.email || "-";
+
+    await loadTasks();
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async function(){
+
+    await db.auth.signOut();
+
+});
+
+
+/* =========================================================
+   LOAD TASKS
+   ========================================================= */
+
+async function loadTasks(){
+
+    const {
+        data,
+        error
+    } = await db
+        .from("tasks")
+        .select("*")
+        .order("created_at", {
+            ascending:false
+        });
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "ไม่สามารถโหลดข้อมูลงานได้\n\n" +
+            error.message
         );
 
-    progress =
-        Math.max(
-            0,
-            Math.min(100, progress)
-        );
+        return;
+    }
+
+    tasks = data || [];
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
+
+function renderAll(){
+
+    renderDashboard();
+    renderTasks();
+    renderReports();
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+function renderDashboard(){
+
+    const total =
+        tasks.length;
+
+    const completed =
+        tasks.filter(
+            t => t.status === "COMPLETED"
+        ).length;
+
+    const inProgress =
+        tasks.filter(
+            t => t.status === "IN_PROGRESS"
+        ).length;
+
+    const overdue =
+        tasks.filter(
+            t => isOverdue(t)
+        ).length;
+
+    const rate =
+        total > 0
+        ? Math.round((completed / total) * 100)
+        : 0;
+
+    document.getElementById("totalTasks").textContent =
+        total;
+
+    document.getElementById("completedTasks").textContent =
+        completed;
+
+    document.getElementById("progressTasks").textContent =
+        inProgress;
+
+    document.getElementById("overdueTasks").textContent =
+        overdue;
+
+    document.getElementById("completionRate").textContent =
+        rate + "%";
+
+
+    const recent =
+        [...tasks].slice(0,10);
+
+    const body =
+        document.getElementById("recentTasksBody");
+
+    body.innerHTML = recent.map(
+        task => taskRowDashboard(task)
+    ).join("");
+
+
+    renderStatusSummary();
+
+}
+
+
+/* =========================================================
+   DASHBOARD ROW
+   ========================================================= */
+
+function taskRowDashboard(task){
+
+    const overdue =
+        isOverdue(task);
+
+    return `
+        <tr>
+
+            <td>
+                <strong>
+                    ${escapeHtml(task.title || "-")}
+                </strong>
+            </td>
+
+            <td>
+                ${escapeHtml(task.work_type || "-")}
+            </td>
+
+            <td>
+                <span class="badge status-${task.status}">
+                    ${formatStatus(task.status)}
+                </span>
+            </td>
+
+            <td>
+                <span class="badge priority-${task.priority}">
+                    ${task.priority || "-"}
+                </span>
+            </td>
+
+            <td style="min-width:120px">
+
+                <div class="progress">
+                    <div
+                        class="progress-bar"
+                        style="width:${Number(task.progress || 0)}%">
+                    </div>
+                </div>
+
+                <small>
+                    ${Number(task.progress || 0)}%
+                </small>
+
+            </td>
+
+            <td class="${overdue ? "overdue" : ""}">
+                ${formatDate(task.due_date)}
+            </td>
+
+        </tr>
+    `;
+}
+
+
+/* =========================================================
+   STATUS SUMMARY
+   ========================================================= */
+
+function renderStatusSummary(){
+
+    const statuses = [
+        "HOLD",
+        "TODO",
+        "IN_PROGRESS",
+        "REVIEW",
+        "WAIT_APPROVAL",
+        "COMPLETED",
+        "SUBMITTED",
+        "CANCELLED"
+    ];
+
+    const html =
+        statuses.map(status => {
+
+            const count =
+                tasks.filter(
+                    t => t.status === status
+                ).length;
+
+            return `
+                <div class="report-box">
+
+                    ${formatStatus(status)}
+
+                    <strong>
+                        ${count}
+                    </strong>
+
+                </div>
+            `;
+
+        }).join("");
+
+    document.getElementById(
+        "statusSummary"
+    ).innerHTML = html;
+
+}
+
+
+/* =========================================================
+   TASK LIST
+   ========================================================= */
+
+function renderTasks(){
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
 
     const status =
         document
-            .getElementById("taskStatus")
-            .value;
+        .getElementById("filterStatus")
+        .value;
 
-    if(status === "COMPLETED"){
-        progress = 100;
+    const priority =
+        document
+        .getElementById("filterPriority")
+        .value;
+
+    const type =
+        document
+        .getElementById("filterType")
+        .value;
+
+
+    const filtered =
+        tasks.filter(task => {
+
+            const matchSearch =
+                !search ||
+                (task.title || "")
+                .toLowerCase()
+                .includes(search) ||
+                (task.description || "")
+                .toLowerCase()
+                .includes(search) ||
+                (task.machine_no || "")
+                .toLowerCase()
+                .includes(search);
+
+            const matchStatus =
+                !status ||
+                task.status === status;
+
+            const matchPriority =
+                !priority ||
+                task.priority === priority;
+
+            const matchType =
+                !type ||
+                task.work_type === type;
+
+            return (
+                matchSearch &&
+                matchStatus &&
+                matchPriority &&
+                matchType
+            );
+
+        });
+
+
+    const body =
+        document.getElementById("tasksBody");
+
+    if(filtered.length === 0){
+
+        body.innerHTML = `
+            <tr>
+                <td colspan="7"
+                    style="text-align:center;padding:30px;color:#64748b">
+                    ไม่พบข้อมูล
+                </td>
+            </tr>
+        `;
+
+        return;
     }
+
+
+    body.innerHTML =
+        filtered.map(task => {
+
+            const overdue =
+                isOverdue(task);
+
+            return `
+                <tr>
+
+                    <td>
+                        <strong>
+                            ${escapeHtml(task.title || "-")}
+                        </strong>
+
+                        <br>
+
+                        <small style="color:#64748b">
+                            ${escapeHtml(task.machine_no || "")}
+                        </small>
+                    </td>
+
+                    <td>
+                        ${escapeHtml(task.work_type || "-")}
+                    </td>
+
+                    <td>
+                        <span class="badge priority-${task.priority}">
+                            ${task.priority || "-"}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="badge status-${task.status}">
+                            ${formatStatus(task.status)}
+                        </span>
+                    </td>
+
+                    <td style="min-width:120px">
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                style="width:${Number(task.progress || 0)}%">
+                            </div>
+                        </div>
+
+                        <small>
+                            ${Number(task.progress || 0)}%
+                        </small>
+
+                    </td>
+
+                    <td class="${overdue ? "overdue" : ""}">
+                        ${formatDate(task.due_date)}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="btn btn-primary"
+                            style="padding:6px 9px"
+                            onclick="editTask('${task.id}')">
+                            Edit
+                        </button>
+
+                        <button
+                            class="btn btn-danger"
+                            style="padding:6px 9px"
+                            onclick="deleteTask('${task.id}')">
+                            Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================================================
+   ADD TASK
+   ========================================================= */
+
+document
+.getElementById("addTaskBtn")
+.addEventListener("click", function(){
+
+    editingTaskId = null;
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent = "เพิ่มงาน";
+
+    taskForm.reset();
+
+    document.getElementById(
+        "taskProgress"
+    ).value = 0;
+
+    document.getElementById(
+        "taskHours"
+    ).value = 0;
+
+    taskModal.classList.add("show");
+
+});
+
+
+/* =========================================================
+   CLOSE MODAL
+   ========================================================= */
+
+function closeModal(){
+
+    taskModal.classList.remove("show");
+
+    editingTaskId = null;
+
+    taskForm.reset();
+
+}
+
+document
+.getElementById("closeModalBtn")
+.addEventListener("click", closeModal);
+
+document
+.getElementById("cancelTaskBtn")
+.addEventListener("click", closeModal);
+
+
+/* =========================================================
+   SAVE TASK
+   ========================================================= */
+
+taskForm.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const {
+        data: {
+            user
+        }
+    } = await db.auth.getUser();
+
+    if(!user){
+
+        alert("กรุณา Login ใหม่");
+
+        return;
+    }
+
+
+    const status =
+        document.getElementById(
+            "taskStatus"
+        ).value;
 
     const taskData = {
 
-        title,
-
-        type:
-            document
-                .getElementById("taskType")
-                .value,
-
-        machine:
-            document
-                .getElementById("taskMachine")
-                .value
-                .trim(),
-
-        location:
-            document
-                .getElementById("taskLocation")
-                .value
-                .trim(),
-
-        assignee:
-            document
-                .getElementById("taskAssignee")
-                .value
-                .trim(),
-
-        priority:
-            document
-                .getElementById("taskPriority")
-                .value,
-
-        status,
-
-        startDate:
-            document
-                .getElementById("taskStartDate")
-                .value,
-
-        dueDate:
-            document
-                .getElementById("taskDueDate")
-                .value,
-
-        progress,
+        title:
+            document.getElementById(
+                "taskTitle"
+            ).value.trim(),
 
         description:
-            document
-                .getElementById("taskDescription")
-                .value
-                .trim()
+            document.getElementById(
+                "taskDescription"
+            ).value.trim(),
+
+        work_type:
+            document.getElementById(
+                "taskType"
+            ).value,
+
+        priority:
+            document.getElementById(
+                "taskPriority"
+            ).value,
+
+        status:
+            status,
+
+        progress:
+            Number(
+                document.getElementById(
+                    "taskProgress"
+                ).value || 0
+            ),
+
+        machine_no:
+            document.getElementById(
+                "taskMachine"
+            ).value.trim(),
+
+        location:
+            document.getElementById(
+                "taskLocation"
+            ).value.trim(),
+
+        start_date:
+            document.getElementById(
+                "taskStartDate"
+            ).value || null,
+
+        due_date:
+            document.getElementById(
+                "taskDueDate"
+            ).value || null,
+
+        actual_hours:
+            Number(
+                document.getElementById(
+                    "taskHours"
+                ).value || 0
+            ),
+
+        updated_at:
+            new Date().toISOString()
 
     };
 
 
-    let tasks = getTasks();
+    let result;
 
 
-    if(editingTaskId !== null){
+    if(editingTaskId){
 
-        const index =
-            tasks.findIndex(
-                t =>
-                    String(t.id) ===
-                    String(editingTaskId)
-            );
-
-        if(index !== -1){
-
-            tasks[index] = {
-
-                ...tasks[index],
-                ...taskData,
-                updatedAt:
-                    new Date().toISOString()
-
-            };
-
-        }
+        result =
+            await db
+            .from("tasks")
+            .update(taskData)
+            .eq("id", editingTaskId)
+            .select()
+            .single();
 
     }else{
 
-        tasks.unshift({
+        taskData.created_by =
+            user.id;
 
-            id:
-                Date.now(),
-
-            ...taskData,
-
-            createdAt:
-                new Date().toISOString()
-
-        });
+        result =
+            await db
+            .from("tasks")
+            .insert(taskData)
+            .select()
+            .single();
 
     }
 
 
-    saveTasks(tasks);
+    if(result.error){
 
-    closeTaskModal();
+        console.error(result.error);
 
-    refreshAll();
+        alert(
+            "บันทึกงานไม่สำเร็จ\n\n" +
+            result.error.message
+        );
 
-    alert(
-        editingTaskId !== null
-        ? "แก้ไขงานเรียบร้อยแล้ว"
-        : "เพิ่มงานเรียบร้อยแล้ว"
-    );
-
-}
+        return;
+    }
 
 
-/* =====================================================
-   DELETE TASK
-===================================================== */
+    const savedTask =
+        result.data;
 
-function deleteTask(id){
 
-    const tasks = getTasks();
+    if(
+        savedTask &&
+        editingTaskId
+    ){
+
+        const oldTask =
+            tasks.find(
+                t => t.id === editingTaskId
+            );
+
+        if(
+            oldTask &&
+            oldTask.status !== savedTask.status
+        ){
+
+            await db
+                .from("status_history")
+                .insert({
+
+                    task_id:
+                        savedTask.id,
+
+                    old_status:
+                        oldTask.status,
+
+                    new_status:
+                        savedTask.status,
+
+                    user_id:
+                        user.id
+
+                });
+
+        }
+
+    }
+
+
+    closeModal();
+
+    await loadTasks();
+
+});
+
+
+/* =========================================================
+   EDIT TASK
+   ========================================================= */
+
+window.editTask = function(id){
 
     const task =
         tasks.find(
-            t =>
-                String(t.id) ===
-                String(id)
+            t => t.id === id
         );
 
     if(!task){
         return;
     }
 
+    editingTaskId = id;
+
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent = "แก้ไขงาน";
+
+
+    document.getElementById(
+        "taskId"
+    ).value = task.id;
+
+
+    document.getElementById(
+        "taskTitle"
+    ).value = task.title || "";
+
+
+    document.getElementById(
+        "taskDescription"
+    ).value =
+        task.description || "";
+
+
+    document.getElementById(
+        "taskType"
+    ).value =
+        task.work_type || "OTHER";
+
+
+    document.getElementById(
+        "taskPriority"
+    ).value =
+        task.priority || "MEDIUM";
+
+
+    document.getElementById(
+        "taskStatus"
+    ).value =
+        task.status || "TODO";
+
+
+    document.getElementById(
+        "taskProgress"
+    ).value =
+        Number(task.progress || 0);
+
+
+    document.getElementById(
+        "taskMachine"
+    ).value =
+        task.machine_no || "";
+
+
+    document.getElementById(
+        "taskLocation"
+    ).value =
+        task.location || "";
+
+
+    document.getElementById(
+        "taskStartDate"
+    ).value =
+        task.start_date || "";
+
+
+    document.getElementById(
+        "taskDueDate"
+    ).value =
+        task.due_date || "";
+
+
+    document.getElementById(
+        "taskHours"
+    ).value =
+        Number(task.actual_hours || 0);
+
+
+    taskModal.classList.add("show");
+
+};
+
+
+/* =========================================================
+   DELETE TASK
+   ========================================================= */
+
+window.deleteTask = async function(id){
+
+    const task =
+        tasks.find(
+            t => t.id === id
+        );
+
+    if(!task){
+        return;
+    }
+
+
     const confirmDelete =
         confirm(
-            "ต้องการลบงานนี้ใช่หรือไม่?\n\n" +
+            "ต้องการลบงานนี้หรือไม่?\n\n" +
             task.title
         );
+
 
     if(!confirmDelete){
         return;
     }
 
-    const newTasks =
-        tasks.filter(
-            t =>
-                String(t.id) !==
-                String(id)
+
+    const {
+        error
+    } = await db
+        .from("tasks")
+        .delete()
+        .eq("id", id);
+
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "ลบงานไม่สำเร็จ\n\n" +
+            error.message
         );
 
-    saveTasks(newTasks);
-
-    refreshAll();
-
-}
-
-
-/* =====================================================
-   QUICK STATUS
-===================================================== */
-
-function changeStatus(id,status){
-
-    const tasks = getTasks();
-
-    const index =
-        tasks.findIndex(
-            t =>
-                String(t.id) ===
-                String(id)
-        );
-
-    if(index === -1){
         return;
     }
 
-    tasks[index].status = status;
 
-    if(status === "COMPLETED"){
-        tasks[index].progress = 100;
-    }
+    await loadTasks();
 
-    if(status === "TODO" &&
-       Number(tasks[index].progress) === 100){
+};
 
-        tasks[index].progress = 0;
 
-    }
+/* =========================================================
+   FILTER EVENTS
+   ========================================================= */
 
-    tasks[index].updatedAt =
-        new Date().toISOString();
+document
+.getElementById("searchInput")
+.addEventListener(
+    "input",
+    renderTasks
+);
 
-    saveTasks(tasks);
+document
+.getElementById("filterStatus")
+.addEventListener(
+    "change",
+    renderTasks
+);
 
-    refreshAll();
+document
+.getElementById("filterPriority")
+.addEventListener(
+    "change",
+    renderTasks
+);
+
+document
+.getElementById("filterType")
+.addEventListener(
+    "change",
+    renderTasks
+);
+
+document
+.getElementById("refreshBtn")
+.addEventListener(
+    "click",
+    loadTasks
+);
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+const menuItems =
+    document.querySelectorAll(
+        ".menu-item"
+    );
+
+menuItems.forEach(item => {
+
+    item.addEventListener(
+        "click",
+        function(){
+
+            menuItems.forEach(
+                x => x.classList.remove("active")
+            );
+
+            this.classList.add("active");
+
+
+            document
+                .querySelectorAll(".page")
+                .forEach(
+                    page => page.classList.remove("active")
+                );
+
+
+            const pageId =
+                this.dataset.page;
+
+
+            document
+                .getElementById(pageId)
+                .classList.add("active");
+
+
+            const titleMap = {
+
+                dashboardPage:
+                    "Dashboard",
+
+                tasksPage:
+                    "Daily Work",
+
+                weeklyPage:
+                    "Weekly Report",
+
+                monthlyPage:
+                    "Monthly Report",
+
+                yearlyPage:
+                    "Yearly Performance",
+
+                portfolioPage:
+                    "Work Portfolio",
+
+                machinePage:
+                    "Machine / Asset",
+
+                kpiPage:
+                    "KPI & Analytics"
+
+            };
+
+
+            document.getElementById(
+                "pageTitle"
+            ).textContent =
+                titleMap[pageId] || "Dashboard";
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   REPORTS
+   ========================================================= */
+
+function renderReports(){
+
+    const now =
+        new Date();
+
+    const weekAgo =
+        new Date();
+
+    weekAgo.setDate(
+        now.getDate() - 7
+    );
+
+
+    const monthStart =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            1
+        );
+
+
+    const yearStart =
+        new Date(
+            now.getFullYear(),
+            0,
+            1
+        );
+
+
+    const weekly =
+        tasks.filter(
+            t => new Date(t.created_at) >= weekAgo
+        );
+
+
+    const monthly =
+        tasks.filter(
+            t => new Date(t.created_at) >= monthStart
+        );
+
+
+    const yearly =
+        tasks.filter(
+            t => new Date(t.created_at) >= yearStart
+        );
+
+
+    document.getElementById(
+        "weeklyReport"
+    ).innerHTML =
+        reportBoxes(weekly);
+
+
+    document.getElementById(
+        "monthlyReport"
+    ).innerHTML =
+        reportBoxes(monthly);
+
+
+    document.getElementById(
+        "yearlyReport"
+    ).innerHTML =
+        reportBoxes(yearly);
+
+
+    renderPortfolio();
+
+    renderKPI();
 
 }
 
 
-/* =====================================================
-   FORMAT
-===================================================== */
+/* =========================================================
+   REPORT BOXES
+   ========================================================= */
+
+function reportBoxes(list){
+
+    const total =
+        list.length;
+
+    const completed =
+        list.filter(
+            t => t.status === "COMPLETED"
+        ).length;
+
+    const progress =
+        list.filter(
+            t => t.status === "IN_PROGRESS"
+        ).length;
+
+    const overdue =
+        list.filter(
+            t => isOverdue(t)
+        ).length;
+
+    return `
+
+        <div class="report-box">
+            Total Work
+            <strong>${total}</strong>
+        </div>
+
+        <div class="report-box">
+            Completed
+            <strong>${completed}</strong>
+        </div>
+
+        <div class="report-box">
+            In Progress
+            <strong>${progress}</strong>
+        </div>
+
+        <div class="report-box">
+            Overdue
+            <strong>${overdue}</strong>
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   PORTFOLIO
+   ========================================================= */
+
+function renderPortfolio(){
+
+    const types = {};
+
+    tasks.forEach(task => {
+
+        const type =
+            task.work_type || "OTHER";
+
+        types[type] =
+            (types[type] || 0) + 1;
+
+    });
+
+
+    const html =
+        Object.entries(types)
+        .sort(
+            (a,b) => b[1] - a[1]
+        )
+        .map(
+            ([type,count]) => `
+                <div class="report-box">
+
+                    ${escapeHtml(type)}
+
+                    <strong>
+                        ${count}
+                    </strong>
+
+                </div>
+            `
+        )
+        .join("");
+
+
+    document.getElementById(
+        "portfolioReport"
+    ).innerHTML =
+        html ||
+        `
+            <div class="report-box">
+                No Data
+                <strong>0</strong>
+            </div>
+        `;
+
+}
+
+
+/* =========================================================
+   KPI
+   ========================================================= */
+
+function renderKPI(){
+
+    const total =
+        tasks.length;
+
+    const completed =
+        tasks.filter(
+            t => t.status === "COMPLETED"
+        ).length;
+
+    const rate =
+        total
+        ? Math.round(
+            completed / total * 100
+        )
+        : 0;
+
+
+    const totalHours =
+        tasks.reduce(
+            (sum,t) =>
+                sum +
+                Number(t.actual_hours || 0),
+            0
+        );
+
+
+    const improvement =
+        tasks.filter(
+            t => t.work_type === "IMPROVEMENT"
+        ).length;
+
+
+    const projects =
+        tasks.filter(
+            t => t.work_type === "PROJECT"
+        ).length;
+
+
+    document.getElementById(
+        "kpiReport"
+    ).innerHTML = `
+
+        <div class="report-box">
+            Total Tasks
+            <strong>${total}</strong>
+        </div>
+
+        <div class="report-box">
+            Completed
+            <strong>${completed}</strong>
+        </div>
+
+        <div class="report-box">
+            Completion Rate
+            <strong>${rate}%</strong>
+        </div>
+
+        <div class="report-box">
+            Actual Hours
+            <strong>${totalHours}</strong>
+        </div>
+
+        <div class="report-box">
+            Improvement
+            <strong>${improvement}</strong>
+        </div>
+
+        <div class="report-box">
+            Projects
+            <strong>${projects}</strong>
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   HELPER FUNCTIONS
+   ========================================================= */
+
+function isOverdue(task){
+
+    if(!task.due_date){
+        return false;
+    }
+
+    if(
+        task.status === "COMPLETED" ||
+        task.status === "CANCELLED"
+    ){
+        return false;
+    }
+
+
+    const today =
+        new Date();
+
+    today.setHours(
+        0,0,0,0
+    );
+
+
+    const due =
+        new Date(
+            task.due_date
+        );
+
+    due.setHours(
+        0,0,0,0
+    );
+
+
+    return due < today;
+
+}
+
 
 function formatDate(date){
 
@@ -2283,10 +2603,10 @@ function formatDate(date){
     }
 
     const d =
-        new Date(date + "T00:00:00");
+        new Date(date);
 
     if(isNaN(d)){
-        return date;
+        return "-";
     }
 
     return d.toLocaleDateString(
@@ -2301,991 +2621,40 @@ function formatDate(date){
 }
 
 
-function statusText(status){
+function formatStatus(status){
 
     const map = {
 
-        TODO:"TODO",
+        HOLD:
+            "HOLD",
 
-        IN_PROGRESS:"IN PROGRESS",
+        TODO:
+            "TODO",
 
-        HOLD:"HOLD",
+        IN_PROGRESS:
+            "IN PROGRESS",
 
-        REVIEW:"REVIEW",
+        REVIEW:
+            "REVIEW",
 
-        WAIT_APPROVAL:"WAIT APPROVAL",
+        WAIT_APPROVAL:
+            "WAIT APPROVAL",
 
-        COMPLETED:"COMPLETED",
+        COMPLETED:
+            "COMPLETED",
 
-        SUBMITTED:"SUBMITTED",
+        SUBMITTED:
+            "SUBMITTED",
 
-        CANCELLED:"CANCELLED"
+        CANCELLED:
+            "CANCELLED"
 
     };
 
-    return map[status] || status;
+    return map[status] || status || "-";
 
 }
 
-
-function isOverdue(task){
-
-    if(
-        !task.dueDate ||
-        task.status === "COMPLETED" ||
-        task.status === "CANCELLED"
-    ){
-        return false;
-    }
-
-    const today =
-        new Date();
-
-    today.setHours(0,0,0,0);
-
-    const due =
-        new Date(
-            task.dueDate + "T00:00:00"
-        );
-
-    return due < today;
-
-}
-
-
-/* =====================================================
-   DASHBOARD
-===================================================== */
-
-function updateDashboard(){
-
-    const tasks = getTasks();
-
-    const total =
-        tasks.length;
-
-    const todo =
-        tasks.filter(
-            t => t.status === "TODO"
-        ).length;
-
-    const progress =
-        tasks.filter(
-            t => t.status === "IN_PROGRESS"
-        ).length;
-
-    const completed =
-        tasks.filter(
-            t => t.status === "COMPLETED"
-        ).length;
-
-    const overdue =
-        tasks.filter(
-            isOverdue
-        ).length;
-
-
-    document
-        .getElementById("totalTasks")
-        .textContent = total;
-
-    document
-        .getElementById("todoTasks")
-        .textContent = todo;
-
-    document
-        .getElementById("progressTasks")
-        .textContent = progress;
-
-    document
-        .getElementById("completedTasks")
-        .textContent = completed;
-
-    document
-        .getElementById("overdueTasks")
-        .textContent = overdue;
-
-
-    renderRecentTasks(tasks);
-
-    renderStatusSummary(tasks);
-
-    renderPrioritySummary(tasks);
-
-}
-
-
-/* =====================================================
-   RECENT TASKS
-===================================================== */
-
-function renderRecentTasks(tasks){
-
-    const box =
-        document.getElementById("recentTasks");
-
-    const recent =
-        [...tasks]
-            .sort(
-                (a,b) =>
-                    new Date(b.createdAt || 0) -
-                    new Date(a.createdAt || 0)
-            )
-            .slice(0,5);
-
-    if(!recent.length){
-
-        box.innerHTML =
-            `<div class="empty">
-                ยังไม่มีงาน
-            </div>`;
-
-        return;
-
-    }
-
-    box.innerHTML =
-        recent.map(task => `
-
-            <div style="
-                padding:13px 0;
-                border-bottom:1px solid #edf0f4;
-            ">
-
-                <div style="
-                    display:flex;
-                    justify-content:space-between;
-                    gap:10px;
-                ">
-
-                    <div>
-
-                        <div class="task-title">
-                            ${escapeHtml(task.title)}
-                        </div>
-
-                        <div class="muted">
-                            ${escapeHtml(task.machine || "-")}
-                            •
-                            ${escapeHtml(task.assignee || "-")}
-                        </div>
-
-                    </div>
-
-                    <span class="badge status-${task.status}">
-                        ${statusText(task.status)}
-                    </span>
-
-                </div>
-
-                <div style="margin-top:9px;">
-
-                    <div style="
-                        display:flex;
-                        justify-content:space-between;
-                        font-size:11px;
-                        color:#64748b;
-                        margin-bottom:4px;
-                    ">
-
-                        <span>
-                            Progress
-                        </span>
-
-                        <span>
-                            ${task.progress || 0}%
-                        </span>
-
-                    </div>
-
-                    <div class="progress-bar">
-
-                        <div
-                            class="progress-fill"
-                            style="width:${task.progress || 0}%">
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   STATUS SUMMARY
-===================================================== */
-
-function renderStatusSummary(tasks){
-
-    const statuses = [
-
-        "TODO",
-        "IN_PROGRESS",
-        "HOLD",
-        "REVIEW",
-        "WAIT_APPROVAL",
-        "COMPLETED",
-        "SUBMITTED",
-        "CANCELLED"
-
-    ];
-
-    const box =
-        document.getElementById("statusSummary");
-
-    box.innerHTML =
-        statuses.map(status => {
-
-            const count =
-                tasks.filter(
-                    t => t.status === status
-                ).length;
-
-            const percent =
-                tasks.length
-                ? Math.round(
-                    count / tasks.length * 100
-                  )
-                : 0;
-
-            return `
-
-                <div style="margin-bottom:13px;">
-
-                    <div style="
-                        display:flex;
-                        justify-content:space-between;
-                        margin-bottom:5px;
-                        font-size:12px;
-                    ">
-
-                        <span>
-                            ${statusText(status)}
-                        </span>
-
-                        <strong>
-                            ${count}
-                        </strong>
-
-                    </div>
-
-                    <div class="progress-bar">
-
-                        <div
-                            class="progress-fill"
-                            style="width:${percent}%">
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   PRIORITY SUMMARY
-===================================================== */
-
-function renderPrioritySummary(tasks){
-
-    const priorities = [
-        "LOW",
-        "MEDIUM",
-        "HIGH",
-        "URGENT"
-    ];
-
-    const box =
-        document.getElementById("prioritySummary");
-
-    box.innerHTML =
-        priorities.map(priority => {
-
-            const count =
-                tasks.filter(
-                    t => t.priority === priority
-                ).length;
-
-            return `
-
-                <div style="
-                    display:flex;
-                    justify-content:space-between;
-                    padding:9px 0;
-                    border-bottom:1px solid #edf0f4;
-                ">
-
-                    <span class="priority-${priority}">
-                        ${priority}
-                    </span>
-
-                    <strong>
-                        ${count}
-                    </strong>
-
-                </div>
-
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   TASK TABLE
-===================================================== */
-
-function renderTasks(){
-
-    const tasks = getTasks();
-
-    const search =
-        (
-            document
-                .getElementById("searchTask")
-                ?.value || ""
-        ).toLowerCase().trim();
-
-    const status =
-        document
-            .getElementById("filterStatus")
-            ?.value || "";
-
-    const priority =
-        document
-            .getElementById("filterPriority")
-            ?.value || "";
-
-    const type =
-        document
-            .getElementById("filterType")
-            ?.value || "";
-
-
-    const filtered =
-        tasks.filter(task => {
-
-            const text =
-                [
-                    task.title,
-                    task.machine,
-                    task.assignee,
-                    task.location,
-                    task.description
-                ]
-                .join(" ")
-                .toLowerCase();
-
-            return (
-
-                (!search || text.includes(search)) &&
-
-                (!status || task.status === status) &&
-
-                (!priority || task.priority === priority) &&
-
-                (!type || task.type === type)
-
-            );
-
-        });
-
-
-    const tbody =
-        document.getElementById("taskTableBody");
-
-
-    if(!filtered.length){
-
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td colspan="8">
-
-                    <div class="empty">
-                        ไม่พบข้อมูลงาน
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    tbody.innerHTML =
-        filtered.map(task => `
-
-            <tr>
-
-                <td>
-
-                    <div class="task-title">
-                        ${escapeHtml(task.title)}
-                    </div>
-
-                    <div class="muted">
-                        ${escapeHtml(task.location || "-")}
-                    </div>
-
-                </td>
-
-
-                <td>
-                    ${escapeHtml(task.type || "-")}
-                </td>
-
-
-                <td>
-                    ${escapeHtml(task.machine || "-")}
-                </td>
-
-
-                <td>
-                    ${escapeHtml(task.assignee || "-")}
-                </td>
-
-
-                <td>
-
-                    <span class="priority-${task.priority}">
-                        ${task.priority}
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    <select
-                        class="form-control"
-                        style="padding:7px 8px;width:auto;"
-                        onchange="changeStatus('${task.id}',this.value)">
-
-                        ${statusOptions(task.status)}
-
-                    </select>
-
-                </td>
-
-
-                <td>
-
-                    <span style="
-                        color:${isOverdue(task) ? "#dc2626" : "inherit"};
-                        font-weight:${isOverdue(task) ? "800" : "400"};
-                    ">
-
-                        ${formatDate(task.dueDate)}
-
-                        ${isOverdue(task) ? "<br><small>OVERDUE</small>" : ""}
-
-                    </span>
-
-                </td>
-
-
-                <td>
-
-                    <div style="
-                        display:flex;
-                        gap:5px;
-                        flex-wrap:wrap;
-                    ">
-
-                        <button
-                            class="btn btn-secondary"
-                            onclick="openTaskModal('${task.id}')">
-                            แก้ไข
-                        </button>
-
-                        <button
-                            class="btn btn-danger"
-                            onclick="deleteTask('${task.id}')">
-                            ลบ
-                        </button>
-
-                    </div>
-
-                </td>
-
-            </tr>
-
-        `).join("");
-
-}
-
-
-function statusOptions(current){
-
-    const statuses = [
-
-        ["TODO","TODO"],
-        ["IN_PROGRESS","IN PROGRESS"],
-        ["HOLD","HOLD"],
-        ["REVIEW","REVIEW"],
-        ["WAIT_APPROVAL","WAIT APPROVAL"],
-        ["COMPLETED","COMPLETED"],
-        ["SUBMITTED","SUBMITTED"],
-        ["CANCELLED","CANCELLED"]
-
-    ];
-
-    return statuses.map(
-        ([value,label]) => `
-
-            <option
-                value="${value}"
-                ${current === value ? "selected" : ""}>
-
-                ${label}
-
-            </option>
-
-        `
-    ).join("");
-
-}
-
-
-/* =====================================================
-   FILTER RESET
-===================================================== */
-
-function resetFilters(){
-
-    document
-        .getElementById("searchTask")
-        .value = "";
-
-    document
-        .getElementById("filterStatus")
-        .value = "";
-
-    document
-        .getElementById("filterPriority")
-        .value = "";
-
-    document
-        .getElementById("filterType")
-        .value = "";
-
-    renderTasks();
-
-}
-
-
-/* =====================================================
-   REPORTS
-===================================================== */
-
-function updateReports(){
-
-    const tasks = getTasks();
-
-    const completed =
-        tasks.filter(
-            t => t.status === "COMPLETED"
-        ).length;
-
-    const overdue =
-        tasks.filter(
-            isOverdue
-        ).length;
-
-    const progress =
-        tasks.filter(
-            t => t.status === "IN_PROGRESS"
-        ).length;
-
-    const completionRate =
-        tasks.length
-        ? Math.round(
-            completed / tasks.length * 100
-          )
-        : 0;
-
-    const onTimeTasks =
-        tasks.filter(
-            t =>
-                t.status === "COMPLETED" &&
-                t.dueDate &&
-                t.updatedAt &&
-                new Date(t.updatedAt) <=
-                new Date(t.dueDate + "T23:59:59")
-        ).length;
-
-    const onTimeRate =
-        completed
-        ? Math.round(
-            onTimeTasks / completed * 100
-          )
-        : 0;
-
-    const overdueRate =
-        tasks.length
-        ? Math.round(
-            overdue / tasks.length * 100
-          )
-        : 0;
-
-
-    document.getElementById("weeklyTotal")
-        .textContent = tasks.length;
-
-    document.getElementById("weeklyCompleted")
-        .textContent = completed;
-
-    document.getElementById("weeklyProgress")
-        .textContent = progress;
-
-    document.getElementById("weeklyOverdue")
-        .textContent = overdue;
-
-
-    document.getElementById("yearTotal")
-        .textContent = tasks.length;
-
-    document.getElementById("yearCompleted")
-        .textContent = completed;
-
-    document.getElementById("completionRate")
-        .textContent = completionRate + "%";
-
-    document.getElementById("yearOverdue")
-        .textContent = overdue;
-
-
-    document.getElementById("kpiCompletion")
-        .textContent = completionRate + "%";
-
-    document.getElementById("kpiOnTime")
-        .textContent = onTimeRate + "%";
-
-    document.getElementById("kpiOverdue")
-        .textContent = overdueRate + "%";
-
-    document.getElementById("kpiTotal")
-        .textContent = tasks.length;
-
-
-    renderDaily(tasks);
-
-    renderMonthly(tasks);
-
-    renderPortfolio(tasks);
-
-}
-
-
-/* =====================================================
-   DAILY
-===================================================== */
-
-function renderDaily(tasks){
-
-    const today =
-        new Date()
-            .toISOString()
-            .split("T")[0];
-
-    const daily =
-        tasks.filter(
-            t =>
-                t.startDate === today ||
-                t.dueDate === today
-        );
-
-    const box =
-        document.getElementById("dailyContent");
-
-    if(!daily.length){
-
-        box.innerHTML = `
-
-            <div class="empty">
-                วันนี้ยังไม่มีงานที่กำหนดไว้
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-    box.innerHTML = `
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>งาน</th>
-                        <th>Machine</th>
-                        <th>ผู้รับผิดชอบ</th>
-                        <th>Status</th>
-                        <th>Due Date</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    ${daily.map(task => `
-
-                        <tr>
-
-                            <td class="task-title">
-                                ${escapeHtml(task.title)}
-                            </td>
-
-                            <td>
-                                ${escapeHtml(task.machine || "-")}
-                            </td>
-
-                            <td>
-                                ${escapeHtml(task.assignee || "-")}
-                            </td>
-
-                            <td>
-                                <span class="badge status-${task.status}">
-                                    ${statusText(task.status)}
-                                </span>
-                            </td>
-
-                            <td>
-                                ${formatDate(task.dueDate)}
-                            </td>
-
-                        </tr>
-
-                    `).join("")}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   MONTHLY
-===================================================== */
-
-function renderMonthly(tasks){
-
-    const months = {};
-
-    tasks.forEach(task => {
-
-        const date =
-            task.createdAt ||
-            task.startDate;
-
-        if(!date){
-            return;
-        }
-
-        const d =
-            new Date(date);
-
-        const key =
-            d.getFullYear() +
-            "-" +
-            String(d.getMonth()+1)
-                .padStart(2,"0");
-
-        if(!months[key]){
-            months[key] = 0;
-        }
-
-        months[key]++;
-
-    });
-
-
-    const entries =
-        Object.entries(months)
-            .sort(
-                (a,b) =>
-                    b[0].localeCompare(a[0])
-            );
-
-
-    const box =
-        document.getElementById("monthlyContent");
-
-
-    if(!entries.length){
-
-        box.innerHTML =
-            `<div class="empty">
-                ยังไม่มีข้อมูล
-            </div>`;
-
-        return;
-
-    }
-
-
-    box.innerHTML = `
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>เดือน</th>
-                        <th>จำนวนงาน</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    ${entries.map(
-                        ([month,count]) => `
-
-                        <tr>
-
-                            <td>
-                                ${month}
-                            </td>
-
-                            <td>
-                                <strong>
-                                    ${count}
-                                </strong>
-                            </td>
-
-                        </tr>
-
-                    `
-                    ).join("")}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   PORTFOLIO
-===================================================== */
-
-function renderPortfolio(tasks){
-
-    const typeCounts = {};
-
-    tasks.forEach(task => {
-
-        const type =
-            task.type || "OTHER";
-
-        typeCounts[type] =
-            (typeCounts[type] || 0) + 1;
-
-    });
-
-
-    const box =
-        document.getElementById("portfolioContent");
-
-
-    if(!tasks.length){
-
-        box.innerHTML =
-            `<div class="empty">
-                ยังไม่มีข้อมูล Portfolio
-            </div>`;
-
-        return;
-
-    }
-
-
-    box.innerHTML = `
-
-        <div class="report-grid">
-
-            ${Object.entries(typeCounts)
-                .map(
-                    ([type,count]) => `
-
-                    <div class="report-box">
-
-                        <h3>
-                            ${type}
-                        </h3>
-
-                        <strong>
-                            ${count}
-                        </strong>
-
-                        <div class="muted">
-                            งาน
-                        </div>
-
-                    </div>
-
-                `
-                )
-                .join("")}
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   REFRESH
-===================================================== */
-
-function refreshAll(){
-
-    updateDashboard();
-
-    renderTasks();
-
-    updateReports();
-
-}
-
-
-/* =====================================================
-   SECURITY / HTML ESCAPE
-===================================================== */
 
 function escapeHtml(value){
 
@@ -3299,52 +2668,35 @@ function escapeHtml(value){
 }
 
 
-/* =====================================================
-   INIT
-===================================================== */
+/* =========================================================
+   INITIAL AUTH CHECK
+   ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
+(async function(){
 
-        const loggedIn =
-            localStorage.getItem(
-                "mgrand_logged_in"
-            );
-
-        if(loggedIn === "true"){
-
-            showApp();
-
+    const {
+        data:{
+            session
         }
+    } = await db.auth.getSession();
+
+
+    if(session && session.user){
+
+        showApp(
+            session.user
+        );
+
+    }else{
+
+        showLogin();
 
     }
-);
 
-
-/* =====================================================
-   ENTER LOGIN
-===================================================== */
-
-document.addEventListener(
-    "keydown",
-    function(event){
-
-        if(
-            event.key === "Enter" &&
-            !document
-                .getElementById("loginPage")
-                .classList.contains("hidden")
-        ){
-
-            login();
-
-        }
-
-    }
-);
+})();
 
 </script>
 
 </body>
 </html>
+```
